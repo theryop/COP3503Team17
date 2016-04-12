@@ -38,13 +38,21 @@ private: //also the Milestone 2 mentioned username and password, include that al
 	double totalSales;
 };
 
+class EmployeeDatabase {
+private:
+	vector<Employee> employees;
+public:
+	bool isInDatabase(string username);
+	void addEmployee(string name, string username, string password);
+};
+
 //need to add Customer class later from the peeps working on the other module
 
 Item::Item(string n, int q) : name(n) { //constructor for the Item class without price parameter
 	quantity = q;
 }
 
-Item::Item(string n, int q, double p) : name(n) { //constructor for the Item class with price parameters
+Item::Item(string n, int q, double p) : name(n) { //constructor for the Item class with price parameter
 	price = floor((100.*p) + .5) / 100.;
 	quantity = q;
 }
@@ -85,15 +93,15 @@ Inventory::Inventory() { //constructor for the Inventory class
 	inv = {};
 }
 
-void Inventory::addItem(string str, int q) {
-	if (isInStock(str)) {
+void Inventory::addItem(string str, int q) { //method for adding item to the inventory
+	if (isInStock(str)) { //checks to see if the item is in the inventory already
 		for (size_t i = 0; i < inv.size(); i++) {
 			if (inv[i].getName() == str) {
-				inv[i].setQuantity(inv[i].getQuantity() + q);
+				inv[i].setQuantity(inv[i].getQuantity() + q); //if it is, simply updates the quantity
 			}
 		}
 	}
-	else {
+	else { //otherwise add the item to the inventory
 		cout << "Please enter the price of " << str << ": ";
 		string input = "";
 		double d = 0;
@@ -104,8 +112,25 @@ void Inventory::addItem(string str, int q) {
 	}
 }
 
-void Inventory::removeItem(string str, int q) {
-
+void Inventory::removeItem(string str, int q) { //method for removing a certain quantity of a certain item from the inventory
+	if (isInStock(str)) {
+		for (size_t i = 0; i < inv.size(); i++) {
+			if (inv[i].getName() == str && inv[i].getQuantity() > 0) {
+				//so my idea if not enough in stock was to just remove the remainder of the inventory
+				//what do you guys think? -SL
+				if (inv[i].getQuantity() - q < 0) { 
+					cout << "Not enough of " << str << " in stock. Only " << inv[i].getQuantity() << " could be removed." << endl;
+					inv[i].setQuantity(0);
+				}
+				else {
+					inv[i].setQuantity(inv[i].getQuantity() - q);
+				}
+			}
+		}
+	}
+	else {
+		cout << "There is none of " << str << " in the inventory." << endl;
+	}
 }
 
 void Inventory::display() {
@@ -117,10 +142,40 @@ void Inventory::display() {
 }
 
 int main() {
-	Inventory *inventory = new Inventory(); //random stuff to test methods
-	inventory->addItem("Beats Headphones", 3);
+	Inventory *inventory = new Inventory(); 
+	cout << "Welcome to the shop! Are you an employee or customer?" << endl;
+	cout << "1. Employee" << endl;
+	cout << "2. Customer" << endl;
+	string input = "";
+	int choice = 0;
+	while (choice != 1 || choice != 2) {
+		bool isNum = true;
+		cout << endl;
+		cin >> input;
+		for (size_t i = 0; i < input.length(); i++) {
+			if (!isdigit(input.at(i))) {
+				isNum = false;
+			}
+		}
+		if (isNum) {
+			choice = atoi(input.c_str());
+		}
+		if (choice == 1) {
+			cout << "Hello Employee! Please enter your username and password." << endl;
+		}
+		else if (choice == 2) {
+			cout << "Hello Customer!" << endl;
+			//insert questionaire here
+		}
+		else {
+			cerr << "Error, not a valid choice. Please enter either 1 for employee or 2 for customer" << endl;
+		}
+	}
+	/*inventory->addItem("Beats Headphones", 3); //random stuff to test methods
 	inventory->addItem("Beats Headphones", 2);
 	inventory->addItem("Football", 3);
-	inventory->display();
+	inventory->removeItem("Football", 4);
+	inventory->removeItem("Football", 2);
+	inventory->display();*/
 	return 0;
 }
