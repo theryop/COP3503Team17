@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
+#include <stdlib.h>
+#include <iomanip>
 
 using namespace std;
 
@@ -11,6 +14,7 @@ private:
 	double price;
 public:
 	Item(string n, int q);
+	Item(string n, int q, double p);
 	string getName();
 	int getQuantity();
 	double getPrice();
@@ -36,7 +40,12 @@ private: //also the Milestone 2 mentioned username and password, include that al
 
 //need to add Customer class later from the peeps working on the other module
 
-Item::Item(string n, int q):name(n) { //constructor for the Item class
+Item::Item(string n, int q) : name(n) { //constructor for the Item class without price parameter
+	quantity = q;
+}
+
+Item::Item(string n, int q, double p) : name(n) { //constructor for the Item class with price parameters
+	price = floor((100.*p) + .5) / 100.;
 	quantity = q;
 }
 
@@ -85,7 +94,12 @@ void Inventory::addItem(string str, int q) {
 		}
 	}
 	else {
-		Item *i = new Item(str, q);
+		cout << "Please enter the price of " << str << ": ";
+		string input = "";
+		double d = 0;
+		getline(cin, input);
+		d = atof(input.c_str());
+		Item *i = new Item(str, q, d);
 		inv.push_back(*i);
 	}
 }
@@ -98,13 +112,15 @@ void Inventory::display() {
 	for (size_t i = 0; i < inv.size(); i++) {
 		cout << "Item: " << inv[i].getName() << endl;
 		cout << "Quantity: " << inv[i].getQuantity() << endl;
-		cout << "Price: " << inv[i].getPrice() << endl;
+		cout << "Price: $" << fixed << setprecision(2) << setfill('0') << inv[i].getPrice() << endl; //formats output to display two decimal places
 	}
 }
 
 int main() {
-	Inventory *inventory = new Inventory();
+	Inventory *inventory = new Inventory(); //random stuff to test methods
 	inventory->addItem("Beats Headphones", 3);
+	inventory->addItem("Beats Headphones", 2);
+	inventory->addItem("Football", 3);
 	inventory->display();
 	return 0;
 }
