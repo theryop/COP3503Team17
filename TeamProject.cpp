@@ -35,15 +35,26 @@ public:
 class Employee { //missing methods for adding/removing items from Inventory? -SL
 private: //also the Milestone 2 mentioned username and password, include that also? -SL
 	const string name;
+	string username;
+	string password;
 	double totalSales;
+public:
+	Employee(string n, string u, string p);
+	string getName();
+	string getUsername();
+	string getPassword();
+	void setUsername(string u);
+	void setPassword(string p);
 };
 
 class EmployeeDatabase {
 private:
 	vector<Employee> employees;
 public:
-	bool isInDatabase(string username);
-	void addEmployee(string name, string username, string password);
+	EmployeeDatabase();
+	bool isInDatabase(string u);
+	void addEmployee(string n, string u, string p);
+	Employee* login(string u, string p);
 };
 
 //need to add Customer class later from the peeps working on the other module
@@ -53,7 +64,7 @@ Item::Item(string n, int q) : name(n) { //constructor for the Item class without
 }
 
 Item::Item(string n, int q, double p) : name(n) { //constructor for the Item class with price parameter
-	price = floor((100.*p) + .5) / 100.;
+	price = floor((100.*p) + .5) / 100.; //rounds price to nearest two decimals
 	quantity = q;
 }
 
@@ -141,14 +152,87 @@ void Inventory::display() {
 	}
 }
 
+Employee::Employee(string n, string u, string p) : name(n) {
+	username = u;
+	password = p;
+}
+
+string Employee::getName() {
+	return name;
+}
+
+string Employee::getUsername() {
+	return username;
+}
+
+string Employee::getPassword() {
+	return password;
+}
+
+void Employee::setUsername(string u) {
+	username = u;
+}
+
+void Employee::setPassword(string p) {
+	password = p;
+}
+
+EmployeeDatabase::EmployeeDatabase() {
+	employees = {};
+}
+
+bool EmployeeDatabase::isInDatabase(string u) {
+	for (size_t i = 0; i < employees.size(); i++) {
+		if (employees[i].getUsername() == u) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void EmployeeDatabase::addEmployee(string n, string u, string p) {
+	if (isInDatabase(u)) {
+		cout << "An account with that username already exists." << endl;
+	}
+	else {
+		Employee *e = new Employee(n, u, p);
+		employees.push_back(*e);
+	}
+}
+
+Employee* EmployeeDatabase::login(string u, string p) {
+	Employee* e = NULL;
+	if (!isInDatabase(u)) {
+		cout << "No account exists with that username." << endl;
+		//insert method for creating an acc here
+	}
+	else {
+		for (size_t i = 0; i < employees.size(); i++) {
+			if (employees[i].getUsername() == u) {
+				string pass = p;
+				while (employees[i].getPassword() != pass) {
+					cout << endl << "Incorrect Password. Please try again." << endl;
+					cout << "Password: ";
+					cin >> pass;
+				}
+				e = &employees[i];
+				cout << "Login successful.";
+			}
+		}
+	}
+	return e;
+}
+
 int main() {
-	Inventory *inventory = new Inventory(); 
+	Inventory *inventory = new Inventory();
+	EmployeeDatabase *db = new EmployeeDatabase();
+	db->addEmployee("Bob", "Bob", "hi"); //delete after
 	cout << "Welcome to the shop! Are you an employee or customer?" << endl;
 	cout << "1. Employee" << endl;
 	cout << "2. Customer" << endl;
 	string input = "";
 	int choice = 0;
-	while (choice != 1 || choice != 2) {
+	while (choice != 1 && choice != 2) {
 		bool isNum = true;
 		cout << endl;
 		cin >> input;
@@ -161,7 +245,39 @@ int main() {
 			choice = atoi(input.c_str());
 		}
 		if (choice == 1) {
-			cout << "Hello Employee! Please enter your username and password." << endl;
+			cout << "Hello Employee! Please login or register for an account." << endl;
+			cout << "1. Login" << endl;
+			cout << "2. Register" << endl;
+			string input1 = "";
+			int choice1 = 0;
+			while (choice1 != 1 && choice1 != 2) {
+				bool isNum1 = true;
+				cout << endl;
+				cin >> input1;
+				for (size_t j = 0; j < input1.length(); j++) {
+					if (!isdigit(input1.at(j))) {
+						isNum1 = false;
+					}
+				}
+				if (isNum1) {
+					choice1 = atoi(input1.c_str());
+				}
+				if (choice1 == 1) {
+					string u = "";
+					string p = "";
+					cout << "Username: ";
+					cin >> u;
+					cout << "Password: ";
+					cin >> p;
+					db->login(u, p);
+				}
+				else if (choice1 == 2) {
+					//insert Employee Register method here
+				}
+				else {
+					cerr << "Error, not a valid choice. Please enter either 1 for login or 2 for register" << endl;
+				}
+			}
 		}
 		else if (choice == 2) {
 			cout << "Hello Customer!" << endl;
