@@ -27,6 +27,7 @@ private:
 public:
 	Inventory();
 	bool isInStock(string str);
+	int size();
 	void addItem(string str, int q);
 	void removeItem(string str, int q);
 	void display();
@@ -35,26 +36,32 @@ public:
 class Employee { //missing methods for adding/removing items from Inventory? -SL
 private: //also the Milestone 2 mentioned username and password, include that also? -SL
 	const string name;
+	Inventory *inv;
 	string username;
 	string password;
 	double totalSales;
 public:
-	Employee(string n, string u, string p);
+	Employee(string n, string u, string p, Inventory *i);
 	string getName();
 	string getUsername();
 	string getPassword();
+	Inventory* getInventory();
 	void setUsername(string u);
 	void setPassword(string p);
+	void makeASale(Item *i, int amount);
 };
 
 class EmployeeDatabase {
 private:
 	vector<Employee> employees;
+	Inventory *inventory;
 public:
-	EmployeeDatabase();
+	EmployeeDatabase(Inventory *inv);
 	bool isInDatabase(string u);
 	void addEmployee(string n, string u, string p);
+	Inventory* getInventory();
 	Employee* login(string u, string p);
+	Employee* reg(string n, string u, string p);
 };
 
 //need to add Customer class later from the peeps working on the other module
@@ -102,6 +109,10 @@ bool Inventory::isInStock(string str) { //checks to see if the desired item is i
 
 Inventory::Inventory() { //constructor for the Inventory class
 	inv = {};
+}
+
+int Inventory::size() {
+	return inv.size();
 }
 
 void Inventory::addItem(string str, int q) { //method for adding item to the inventory
@@ -152,9 +163,11 @@ void Inventory::display() {
 	}
 }
 
-Employee::Employee(string n, string u, string p) : name(n) {
+Employee::Employee(string n, string u, string p, Inventory *i) : name(n) {
+	inv = i;
 	username = u;
 	password = p;
+	totalSales = 0;
 }
 
 string Employee::getName() {
@@ -169,6 +182,10 @@ string Employee::getPassword() {
 	return password;
 }
 
+Inventory* Employee::getInventory() {
+	return inv;
+}
+
 void Employee::setUsername(string u) {
 	username = u;
 }
@@ -177,8 +194,25 @@ void Employee::setPassword(string p) {
 	password = p;
 }
 
-EmployeeDatabase::EmployeeDatabase() {
+void Employee::makeASale(Item *i, int amount) {
+	Inventory *inv = getInventory();
+	string name = i->getName();
+	if (inv->isInStock(i->getName())) {
+			inv->removeItem(i->getName(), amount);
+			totalSales += i->getPrice() * amount;
+	}
+	else {
+		cout << "Item " << i->getName() << " could not be found in the inventory" << endl;
+	}
+}
+
+Inventory* EmployeeDatabase::getInventory() {
+	return inventory;
+}
+
+EmployeeDatabase::EmployeeDatabase(Inventory *inv) {
 	employees = {};
+	inventory = inv;
 }
 
 bool EmployeeDatabase::isInDatabase(string u) {
@@ -195,7 +229,7 @@ void EmployeeDatabase::addEmployee(string n, string u, string p) {
 		cout << "An account with that username already exists." << endl;
 	}
 	else {
-		Employee *e = new Employee(n, u, p);
+		Employee *e = new Employee(n, u, p, getInventory());
 		employees.push_back(*e);
 	}
 }
@@ -203,7 +237,46 @@ void EmployeeDatabase::addEmployee(string n, string u, string p) {
 Employee* EmployeeDatabase::login(string u, string p) {
 	Employee* e = NULL;
 	if (!isInDatabase(u)) {
-		cout << "No account exists with that username." << endl;
+		cout << endl << "No account exists with that username." << endl;
+		cout << "Would you like to retry or create an account?" << endl;
+		string input = "";
+		int choice = 0;
+		while (choice != 1 && choice != 2) {
+			cout << "1. Retry login" << endl;
+			cout << "2. Register for an account" << endl;
+			bool isNum = true;
+			cout << endl;
+			cin >> input;
+			for (size_t j = 0; j < input.length(); j++) {
+				if (!isdigit(input.at(j))) {
+					isNum = false;
+				}
+			}
+			if (isNum) {
+				choice = atoi(input.c_str());
+			}
+			if (choice == 1) {
+				string u = "";
+				string p = "";
+				cout << "Username: ";
+				cin >> u;
+				cout << "Password: ";
+				cin >> p;
+				return EmployeeDatabase::login(u, p);
+			}
+			if (choice == 2) {
+				string n = "";
+				string u = "";
+				string p = "";
+				cout << "Name: ";
+				cin >> n;
+				cout << "Username: ";
+				cin >> u;
+				cout << "Password: ";
+				cin >> p;
+				return EmployeeDatabase::reg(n, u, p);
+			}
+		}
 		//insert method for creating an acc here
 	}
 	else {
@@ -216,16 +289,31 @@ Employee* EmployeeDatabase::login(string u, string p) {
 					cin >> pass;
 				}
 				e = &employees[i];
-				cout << "Login successful.";
+				cout << "Login successful." << endl;
 			}
 		}
 	}
 	return e;
 }
 
+Employee* EmployeeDatabase::reg(string n, string u, string p) {
+	Employee *e = NULL;
+	if (isInDatabase(u)) {
+		cout << endl << "An account with that username already exists. Please enter a new username." << endl;
+		string u = "";
+		cout << "Username: ";
+		cin >> u;
+		return EmployeeDatabase::reg(n, u, p);
+	}
+	else {
+		e = new Employee(n, u, p, getInventory());
+	}
+	return e;
+}
+
 int main() {
 	Inventory *inventory = new Inventory();
-	EmployeeDatabase *db = new EmployeeDatabase();
+	EmployeeDatabase *db = new EmployeeDatabase(inventory);
 	db->addEmployee("Bob", "Bob", "hi"); //delete after
 	cout << "Welcome to the shop! Are you an employee or customer?" << endl;
 	cout << "1. Employee" << endl;
@@ -269,10 +357,20 @@ int main() {
 					cin >> u;
 					cout << "Password: ";
 					cin >> p;
-					db->login(u, p);
+					Employee *e = db->login(u, p);
 				}
 				else if (choice1 == 2) {
-					//insert Employee Register method here
+					string n = "";
+					string u = "";
+					string p = "";
+					cout << "To register for an account, please enter the following information. " << endl;
+					cout << "Name: ";
+					cin >> n;
+					cout << "Username: ";
+					cin >> u;
+					cout << "Password: ";
+					cin >> p;
+					Employee *e = db->reg(n, u, p);
 				}
 				else {
 					cerr << "Error, not a valid choice. Please enter either 1 for login or 2 for register" << endl;
