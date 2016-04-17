@@ -34,14 +34,14 @@ public:
 };
 
 class Employee { //missing methods for adding/removing items from Inventory? -SL
-private: //also the Milestone 2 mentioned username and password, include that also? -SL
+private: 
 	const string name;
 	Inventory *inv;
 	string username;
 	string password;
 	double totalSales;
 public:
-	Employee(string n, string u, string p, Inventory *i);
+	Employee(string n, string u, string p, Inventory *i); // n for name, u for username, p for password, 
 	string getName();
 	string getUsername();
 	string getPassword();
@@ -241,14 +241,17 @@ Employee* EmployeeDatabase::login(string u, string p) {
 		cout << "Would you like to retry or create an account?" << endl;
 		string input = "";
 		int choice = 0;
-		while (choice != 1 && choice != 2) {
+		while (choice != 1 && choice != 2) 
+		{
 			cout << "1. Retry login" << endl;
 			cout << "2. Register for an account" << endl;
-			bool isNum = true;
+			cout << "3. Exit";
+				bool isNum = true;
 			cout << endl;
 			cin >> input;
 			for (size_t j = 0; j < input.length(); j++) {
-				if (!isdigit(input.at(j))) {
+				if (!isdigit(input.at(j))) 
+				{
 					isNum = false;
 				}
 			}
@@ -275,6 +278,9 @@ Employee* EmployeeDatabase::login(string u, string p) {
 				cout << "Password: ";
 				cin >> p;
 				return EmployeeDatabase::reg(n, u, p);
+			}
+			if (choice == 3) {
+				break;
 			}
 		}
 		//insert method for creating an acc here
@@ -333,48 +339,58 @@ int main() {
 			choice = atoi(input.c_str());
 		}
 		if (choice == 1) {
-			cout << "Hello Employee! Please login or register for an account." << endl;
-			cout << "1. Login" << endl;
-			cout << "2. Register" << endl;
-			string input1 = "";
-			int choice1 = 0;
-			while (choice1 != 1 && choice1 != 2) {
-				bool isNum1 = true;
-				cout << endl;
-				cin >> input1;
-				for (size_t j = 0; j < input1.length(); j++) {
-					if (!isdigit(input1.at(j))) {
-						isNum1 = false;
+			bool keepgoing = true;
+			while (keepgoing)
+			{
+				cout << "Hello Employee! Please login or register for an account." << endl;
+				cout << "1. Login" << endl;
+				cout << "2. Register" << endl;
+				cout << "3. Exit" << endl;
+				string input1 = "";
+				int choice1 = 0;
+				while (choice1 != 1 && choice1 != 2) {
+					bool isNum1 = true;
+					cout << endl;
+					cin >> input1;
+					for (size_t j = 0; j < input1.length(); j++) {
+						if (!isdigit(input1.at(j))) {
+							isNum1 = false;
+						}
 					}
-				}
-				if (isNum1) {
-					choice1 = atoi(input1.c_str());
-				}
-				if (choice1 == 1) {
-					string u = "";
-					string p = "";
-					cout << "Username: ";
-					cin >> u;
-					cout << "Password: ";
-					cin >> p;
-					Employee *e = db->login(u, p);
-				}
-				else if (choice1 == 2) {
-					string n = "";
-					string u = "";
-					string p = "";
-					cout << "To register for an account, please enter the following information. " << endl;
-					cout << "Name: ";
-					cin >> n;
-					cout << "Username: ";
-					cin >> u;
-					cout << "Password: ";
-					cin >> p;
-					Employee *e = db->reg(n, u, p);
-				}
-				else {
-					cerr << "Error, not a valid choice. Please enter either 1 for login or 2 for register" << endl;
-				}
+					if (isNum1) {
+						choice1 = atoi(input1.c_str());
+					}
+					if (choice1 == 1) {
+						string u = "";
+						string p = "";
+						cout << "Username: ";
+						cin >> u;
+						cout << "Password: ";
+						cin >> p;
+						Employee *e = db->login(u, p);
+					}
+					else if (choice1 == 2) {
+						string n = "";
+						string u = "";
+						string p = "";
+						cout << "To register for an account, please enter the following information. " << endl;
+						cout << "Name: ";
+						cin >> n;
+						cout << "Username: ";
+						cin >> u;
+						cout << "Password: ";
+						cin >> p;
+						Employee *e = db->reg(n, u, p);
+						cout << "Thank you for registering, " << n << "! Please log in with your new credentials." << endl;
+					}
+					else if (choice1 == 3) {
+						main();
+					}
+					else {
+						cerr << "Error, not a valid choice. Please enter either 1 for login or 2 for register" << endl;
+					}
+			}
+			
 			}
 		}
 		else if (choice == 2) {
