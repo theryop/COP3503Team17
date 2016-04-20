@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <math.h>
 
+
 using namespace std;
 
 class items { //constructor for the item class
@@ -226,7 +227,8 @@ int main() {
 						string userLoggedInInput = "";
 						int loggedInInput = 0;
 						bool isNum3 = true;
-							while (loggedInInput != 1 && loggedInInput != 2 && loggedInInput != 3 && loggedInInput != 4) {
+							while (loggedInInput != 1 && loggedInInput != 2 && loggedInInput != 3 && loggedInInput != 4 && loggedInInput != 5) {
+								isNum3 = true;
 								if (loginFirstTime) {
 									cout << endl << "Login successful." << endl;
 								}
@@ -235,9 +237,13 @@ int main() {
 								cout << "1. Restock" << endl;
 								cout << "2. Make a sale" << endl;
 								cout << "3. Check inventory" << endl;
-								cout << "4. Logout" << endl;
+								cout << "4. Check total sales" << endl;
+								cout << "5. Logout" << endl;
 								cout << endl;
-								cin >> userLoggedInInput;
+								getline(cin, userLoggedInInput);
+								if (userLoggedInInput.length() == 0) {
+									isNum3 = false;
+								}
 								for (size_t i = 0; i < userLoggedInInput.length(); i++) {
 									if (!isdigit(userLoggedInInput.at(i))) {
 										isNum3 = false;
@@ -246,7 +252,7 @@ int main() {
 								if (isNum3) {
 									loggedInInput = atoi(userLoggedInInput.c_str());
 								}
-								if (loggedInInput == 1) { //PETER's CODE
+								if (loggedInInput == 1) { //RESTOCK METHOD
 									//takes in input for creativity/activity/complexity
 									//creates item
 									//pushes on to vectorOfItems
@@ -264,7 +270,7 @@ int main() {
 									double price = 0;
 									string priceStr = "";
 									cout << "What is the name of item you'd like to restock?" << endl;
-									cin >> n;
+									getline(cin, n);
 									size_t counter = 0;
 									char c;
 									while (counter < n.length()) //converts all characters in string to lowercase
@@ -336,13 +342,13 @@ int main() {
 										cout << "$";
 										cin >> priceStr;
 										if (isDouble(priceStr)) { //input validation for the price variable
-											price = stod(priceStr.c_str());
+											price = atof(priceStr.c_str());
 										}
 										while (!isDouble(priceStr)) {
 											cout << "Not a valid choice. Please enter a valid price." << endl;
 											cin >> priceStr;
 											if (isDouble(priceStr)) {
-												price = stod(priceStr.c_str());
+												price = atof(priceStr.c_str());
 											}
 										}
 										cout << "What is the creativity value associated with the item? (Scale of 1-5)" << endl;
@@ -399,7 +405,7 @@ int main() {
 									// make all lowercase
 									cout << "What was the name of the item you sold?" << endl;
 									cin >> purchaseName;
-									int counter = 0;
+									size_t counter = 0;
 									char c;
 									while (counter < purchaseName.length()) //converts all characters in string to lowercase
 									{
@@ -460,11 +466,17 @@ int main() {
 								}
 
 								else if (loggedInInput == 4) {
+									cout << "Employee " << vectorOfEmployees[currentEmployee].getEmpName() << " has sold items in total of $" << vectorOfEmployees[currentEmployee].getEmpTotalSales() << endl;
+									loggedInInput = 0;
+								}
+
+								else if (loggedInInput == 5) {
 									cout << "Logout successful." << endl;
 									secondInput = 0;							
 								}
 								else {
 									cout << "Error. Not a valid choice. Please try again." << endl;
+									loggedInInput = 0;
 								}
 							} //end of Employee options loop
 						//} // end of while loop for user logged in GIVING PROBLEMS RN
