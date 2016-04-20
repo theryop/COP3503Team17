@@ -161,6 +161,55 @@ int main() {
 	vector<employees> vectorOfEmployees; //creates the vector of employees
 
 	int currentEmployee;
+	// the following code is an example of what can be held in the database
+	int example = 0;
+	while (example < 3)
+	{
+		vectorOfItems.push_back(items("ball",2.50,2,5,1));
+		example++;
+	}
+	example = 0;
+	while (example < 3)
+	{
+		vectorOfItems.push_back(items("rubix's cube",3.75,2,1,5));
+		example++;
+	}
+	example = 0;
+	while (example < 3)
+	{
+		vectorOfItems.push_back(items("coloring book",2.25,4,1,2));
+		example++;
+	}
+	example = 0;
+	while (example < 3)
+	{
+		vectorOfItems.push_back(items("keyboard",25.50,4,1,4));
+		example++;
+	}
+	example = 0;
+	while (example < 3)
+	{
+		vectorOfItems.push_back(items("dance lessons", 15.50,5,5,4));
+		example++;
+	}
+	example = 0;
+	while (example < 3)
+	{
+		vectorOfItems.push_back(items("chalk", 5.25,5,4,1));
+		example++;
+	}
+	example = 0;
+	while (example < 3)
+	{
+		vectorOfItems.push_back(items("exercise machine", 175.25,1,4,4));
+		example++;
+	}
+	example = 0;
+	while (example < 3)
+	{
+		vectorOfItems.push_back(items("pinwheel", 1.25,2,1,1));
+		example++;
+	}
 
 	//initial prompt for user to select employee or customer
 	cout << "Welcome to the shop! Are you an employee or customer?" << endl;
