@@ -934,7 +934,7 @@ int main() {
 								{
 									if (purchaseName == vectorOfItems[i].getItemName())
 									{
-										cout << "We have found a(n) " << purchaseName << " with a price of $" << vectorOfItems[i].getItemPrice() << " Proceed with transaction?" << endl;
+										cout << "We have found a(n) " << purchaseName << " with a price of $" << fixed << setprecision(2) << vectorOfItems[i].getItemPrice() << " Proceed with transaction?" << endl;
 										cout << "1. Yes" << endl;
 										cout << "2. No" << endl;
 										int pchoice = 0;
@@ -954,7 +954,7 @@ int main() {
 										{
 											vectorOfEmployees[currentEmployee].setEmpTotalSales(vectorOfEmployees[currentEmployee].getEmpTotalSales() + vectorOfItems[i].getItemProfit());
 											vectorOfItems.erase(vectorOfItems.begin() + i);//deletes item in vector
-											cout << "Successful Transaction. You have earned a profit of $" << vectorOfItems[i].getItemProfit() << endl << endl;;
+											cout << "Successful Transaction. You have earned a profit of $" << fixed << setprecision(2) << vectorOfItems[i].getItemProfit() << endl << endl;;
 											success = true; //changes the success variable to true so as to not print the error
 											i--; //allows full iteration through
 										}
@@ -1014,14 +1014,14 @@ int main() {
 
 								for (size_t i = 0; i < itemsWithoutDupes.size(); i++)
 								{
-									cout << "Item: " << itemsWithoutDupes[i].getItemName() << endl << "Price: $" << itemsWithoutDupes[i].getItemPrice() << endl << "Profit Per Sale: $" << itemsWithoutDupes[i].getItemProfit() << endl << "Quantity: " << itemcounts[i] << endl << "----------------------" << endl;
+									cout << "Item: " << itemsWithoutDupes[i].getItemName() << endl << "Price: $" << fixed << setprecision(2) << itemsWithoutDupes[i].getItemPrice() << endl << "Profit Per Sale: $" << itemsWithoutDupes[i].getItemProfit() << endl << "Quantity: " << itemcounts[i] << endl << "----------------------" << endl;
 								}
 								loggedInInput = 0;
 							}
 
 							else if (loggedInInput == 4)
 							{
-								cout << "Employee " << vectorOfEmployees[currentEmployee].getEmpName() << " has sold items in total of $" << vectorOfEmployees[currentEmployee].getEmpTotalSales() << endl;
+								cout << "Employee " << vectorOfEmployees[currentEmployee].getEmpName() << " has sold items in total of $" << fixed << setprecision(2) << vectorOfEmployees[currentEmployee].getEmpTotalSales() << endl;
 								loggedInInput = 0;
 							}
 
@@ -1118,7 +1118,13 @@ int main() {
 			age = atoi(ageStr.c_str());
 
 			cout << endl << "How much money are you looking to spend today?" << endl;
-			cin >> budget;
+			string budgetStr = "";
+			getline(cin, budgetStr);
+			while (!isDouble(budgetStr)) {
+				cout << "Please enter a valid dollar amount." << endl;
+				getline(cin, budgetStr);
+			}
+			budget = atof(budgetStr.c_str());
 
 			Customer *user = new Customer(cn, age, budget); //creates a new instance of a customer
 
@@ -1128,7 +1134,7 @@ int main() {
 			cout << "3. Display all" << endl;		//loop through vector and print inventory
 			cout << "4. Check current budget" << endl;
 			cout << "5. Update current budget" << endl;
-			cout << "5. Go back" << endl;
+			cout << "6. Go back" << endl;
 
 			bool keepgoing = true;
 			int secondinput = 0;
@@ -1157,7 +1163,7 @@ int main() {
 					secondinput = 0;
 				}
 				else if (secondinput == 4) {
-					cout << "You're current reminaing budget is $" << user->getCustomerBudget() << endl;
+					cout << "You're current reminaing budget is $" << fixed << setprecision(2) << user->getCustomerBudget() << endl;
 					cout << endl;
 					secondinput = 0;
 				}
@@ -1171,9 +1177,9 @@ int main() {
 						cout << "Please enter a valid dollar amount." << endl;
 						getline(cin, addbudgetStr);
 					}
-					addbudget = atoi(addbudgetStr.c_str());
+					addbudget = atof(addbudgetStr.c_str());
 					user->addBudget(addbudget);
-					cout << "$" << addbudget << " successfully added to the budget!" << endl;
+					cout << "$" << fixed << setprecision(2) << addbudget << " successfully added to the budget!" << endl;
 					secondinput = 0;
 				}
 				else if (secondinput == 6) { //exit function to return to employee/customer select screen
@@ -1227,7 +1233,12 @@ int main() {
 				exit(EXIT_SUCCESS);
 			}
 		}
-		if (!(firstInput == 1 || firstInput == 2 || firstInput == 3)) {
+		if (firstInput == 0 || firstInput == -1)
+		{
+
+		}
+		else if (!(firstInput == 1 || firstInput == 2 || firstInput == 3))
+		{
 			cout << "Error, not a valid choice. Please enter either 1 for employee, 2 for customer or 3 to exit the shop." << endl;
 		}
 			firstInput = 0;
