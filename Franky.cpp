@@ -11,12 +11,12 @@ using namespace std;
 class items { //constructor for the item class
 private:
 	string itemName;
-	int itemPrice;
+	double itemPrice;
 	int itemCreativity;
 	int itemActivity;
 	int itemComplexity;
 public:
-	items(string n, int p, int c, int a, int comp) :itemName(n)
+	items(string n, double p, int c, int a, int comp) :itemName(n)
 		, itemPrice(p)
 		, itemCreativity(c)
 		, itemActivity(a)
@@ -27,7 +27,7 @@ public:
 		return itemName;
 	}
 
-	int getItemPrice() {
+	double getItemPrice() {
 		return itemPrice;
 	}
 
@@ -49,9 +49,9 @@ private:
 	string empName;
 	string empUsername;
 	string empPassword;
-	int empTotalSales;
+	double empTotalSales;
 public:
-	employees(string n, string u, string pw, int tSales) :empName(n)
+	employees(string n, string u, string pw, double tSales) :empName(n)
 		, empUsername(u)
 		, empPassword(pw)
 		, empTotalSales(tSales)
@@ -69,11 +69,11 @@ public:
 		return empPassword;
 	}
 
-	int getEmpTotalSales() {
+	double getEmpTotalSales() {
 		return empTotalSales;
 	}
 
-	void setEmpTotalSales(int s) {
+	void setEmpTotalSales(double s) {
 		empTotalSales = s;
 	}
 };
@@ -130,6 +130,23 @@ break;
 }
 */
 
+bool isNumber(string str) {
+	for (size_t i = 0; i < str.length(); i++) {
+		if(!isdigit(str.at(i))) {
+			return false;
+		} 
+	}
+	return true;
+}
+
+bool isDouble(string str) {
+	for (size_t i = 0; i < str.length(); i++) {
+		if (!(isdigit(str.at(i)) || str.at(i) == '.')) {
+			return false;
+		}
+	}
+	return true;
+}
 
 int main() {
 	vector<items> vectorOfItems; //creates the vector of items
@@ -184,11 +201,12 @@ int main() {
 				if (secondInput == 1) {
 					string username;
 					string password;
+					string temp = "";
+					getline(cin, temp);
 					cout << "Username: ";
-					cin >> username;
+					getline(cin, username);
 					cout << "Password: ";
-					cin >> password;
-
+					getline(cin, password);
 					bool isAuthenticated = false;
 					//Iterate through vector and compare username/password -> write a method to return true/false
 					for (size_t i = 0; i < vectorOfEmployees.size(); i++) {
@@ -237,10 +255,14 @@ int main() {
 									int creativity = 0;
 									int activity = 0;
 									int complexity = 0;
+									string creativityStr = "";
+									string activityStr = "";
+									string complexityStr = "";
 									string name = "";
 									string n = "";
 									// make name all lowercase
-									int price = 0;
+									double price = 0;
+									string priceStr = "";
 									cout << "What is the name of item you'd like to restock?" << endl;
 									cin >> n;
 									size_t counter = 0;
@@ -251,13 +273,13 @@ int main() {
 										if (isupper(c))
 										{
 											n[counter] = tolower(c);
-
 										}
 										counter++;
 									}
 									name = n;
 									counter = 0;
 									size_t counter2 = 0;
+									string restockchoiceStr = "";
 									int restockchoice = 0;
 									bool alreadychecked = false;
 									bool usingprevious = false;
@@ -277,7 +299,19 @@ int main() {
 											cout << name << " has been found in our inventory with a price of " << vectorOfItems[counter].getItemPrice() << ", " << vectorOfItems[counter].getItemCreativity() << " Creativity, " << vectorOfItems[counter].getItemActivity() << " Activity, and " << vectorOfItems[counter].getItemComplexity() << " complexity. Would you like to use these statistics?" << endl;
 											cout << "1. Yes" << endl;
 											cout << "2. No" << endl;
-											cin >> restockchoice;
+											cin >> restockchoiceStr;
+											if (isNumber(restockchoiceStr)) { //input validation for the restockchoice variable
+												restockchoice = atoi(restockchoiceStr.c_str());
+											}
+											while (!isNumber(restockchoiceStr) || restockchoice != 1 && restockchoice != 2) {
+												cout << "Not a valid choice. Please enter 1 for Yes and 2 for No." << endl;
+												cin >> restockchoiceStr;
+												if (isNumber(restockchoiceStr)) {
+													restockchoice = atoi(restockchoiceStr.c_str());
+												}
+											}
+											//if the user wants to use same data from the previous item, create a duplicate
+											//and push it into the inventory
 											if (restockchoice == 1)
 											{
 												price = vectorOfItems[counter].getItemPrice();
@@ -287,13 +321,10 @@ int main() {
 												usingprevious = true;
 												break;
 											}
+											//otherwise create a item and push it into the inventory
 											else if (restockchoice == 2)
 											{
 												vectorOfCheckedItems.push_back(vectorOfItems[counter]);
-											}
-											else
-											{
-												//needs to add a validator for false choice
 											}
 										}
 
@@ -302,68 +333,122 @@ int main() {
 									if (!usingprevious)
 									{
 										cout << "What is the selling price for this item?" << endl;
-										cin >> price;
+										cout << "$";
+										cin >> priceStr;
+										if (isDouble(priceStr)) { //input validation for the price variable
+											price = stod(priceStr.c_str());
+										}
+										while (!isDouble(priceStr)) {
+											cout << "Not a valid choice. Please enter a valid price." << endl;
+											cin >> priceStr;
+											if (isDouble(priceStr)) {
+												price = stod(priceStr.c_str());
+											}
+										}
 										cout << "What is the creativity value associated with the item? (Scale of 1-5)" << endl;
-										cin >> creativity;
+										cin >> creativityStr;
+										if (isNumber(creativityStr)) { //input validation for the creativity variable
+											creativity = atoi(creativityStr.c_str());
+										}
+										while (!isNumber(creativityStr) || creativity < 1 || creativity > 5) {
+											cout << "Not a valid choice. Please enter an integer value between 1 and 5 inclusive." << endl;
+											cin >> creativityStr;
+											if (isNumber(creativityStr)) {
+												creativity = atoi(creativityStr.c_str());
+											}
+										}
 										cout << "What is the activity value associated with the item? (Scale of 1-5)" << endl;
-										cin >> activity;
+										cin >> activityStr;
+										if (isNumber(activityStr)) { //input validation for the activity variable
+											activity = atoi(activityStr.c_str());
+										}
+										while (!isNumber(activityStr) || activity < 1 || activity > 5) {
+											cout << "Not a valid choice. Please enter an integer value between 1 and 5 inclusive." << endl;
+											cin >> activityStr;
+											if (isNumber(activityStr)) {
+												activity = atoi(activityStr.c_str());
+											}
+										}
 										cout << "What is the complexity value associated with the item? (Scale of 1-5)" << endl;
-										cin >> complexity;
+										cin >> complexityStr;
+										if (isNumber(complexityStr)) { //input validation for the complexity variable
+											complexity = atoi(complexityStr.c_str());
+										}
+										while (!isNumber(complexityStr) || complexity < 1 || complexity > 5) {
+											cout << "Not a valid choice. Please enter an integer value between 1 and 5 inclusive." << endl;
+											cin >> complexityStr;
+											if (isNumber(complexityStr)) {
+												complexity = atoi(complexityStr.c_str());
+											}
+										}
 									}
 
 									vectorOfItems.push_back(items(name, price, creativity, activity, complexity));
-									cout << "Restocked!" << endl;
+									cout << name << " successfully restocked!" << endl;
 									loggedInInput = 0; //need this so the loop continues until it exits
 								}
 
-								else if (loggedInInput == 2) 
-							{
-								//takes in input of item name
-								//removes first found item from vectorOfItems
-								//add to sale count of employee -> increments value of count for employee
-								// again this would be better in main function because we can keep track of employee with a variable equal to the username
-								string purchaseName;
-								bool success = false;
-								// make all lowercase
-								cout << "What was the name of the item you sold?" << endl;
-								cin >> purchaseName;
-								int counter = 0;
-								char c;
-								while (counter < purchaseName.length()) //converts all characters in string to lowercase
+								else if (loggedInInput == 2)
 								{
-									c = purchaseName[counter];
-									if (isupper(c))
+									//takes in input of item name
+									//removes first found item from vectorOfItems
+									//add to sale count of employee -> increments value of count for employee
+									// again this would be better in main function because we can keep track of employee with a variable equal to the username
+									string purchaseName;
+									bool success = false;
+									// make all lowercase
+									cout << "What was the name of the item you sold?" << endl;
+									cin >> purchaseName;
+									int counter = 0;
+									char c;
+									while (counter < purchaseName.length()) //converts all characters in string to lowercase
 									{
-										purchaseName[counter] = tolower(c);
-
-									}
-									counter++;
-								}
-
-								for (size_t i = 0; i < vectorOfItems.size(); i++) 
-								{
-									if (purchaseName == vectorOfItems[i].getItemName()) 
-									{
-										cout << "We have found a " << purchaseName << " with a price of $" << vectorOfItems[i].getItemPrice() << " Proceed with transaction?" << endl;
-										cout << "1. Yes" << endl;
-										cout << "2. No" << endl;
-										int pchoice = 0;
-										cin >> pchoice;
-										if (pchoice == 1)
+										c = purchaseName[counter];
+										if (isupper(c))
 										{
-											vectorOfEmployees[currentEmployee].setEmpTotalSales(vectorOfEmployees[currentEmployee].getEmpTotalSales() + 1);
-											vectorOfItems.erase(vectorOfItems.begin() + i);//deletes item in vector
-											cout << "Successful Transaction" << endl;
-											success = true;
-										}
-								   	}
+											purchaseName[counter] = tolower(c);
 
-									if (!success) 
-									{
-										cout << "Failed to sell item!" << endl;
+										}
+										counter++;
 									}
+
+									for (size_t i = 0; i < vectorOfItems.size(); i++)
+									{
+										if (purchaseName == vectorOfItems[i].getItemName())
+										{
+											cout << "We have found a(n) " << purchaseName << " with a price of $" << vectorOfItems[i].getItemPrice() << " Proceed with transaction?" << endl;
+											cout << "1. Yes" << endl;
+											cout << "2. No" << endl;
+											int pchoice = 0;
+											string pchoiceStr = "";
+											cin >> pchoiceStr;
+											if (isNumber(pchoiceStr)) { //input validation for the complexity variable
+												pchoice = atoi(pchoiceStr.c_str());
+											}
+											while (!isNumber(pchoiceStr) || pchoice != 1 && pchoice != 2) {
+												cout << "Not a valid choice. Please enter 1 for Yes or 2 for No." << endl;
+												cin >> pchoiceStr;
+												if (isNumber(pchoiceStr)) {
+													pchoice = atoi(pchoiceStr.c_str());
+												}
+											}
+											if (pchoice == 1)
+											{
+												//NEED TO CHECK THE FOLLOWING CODE TO SEE IF IT WORKS ONCE WE IMPLEMENT A CHECK TOTAL SALES METHOD
+												vectorOfEmployees[currentEmployee].setEmpTotalSales(vectorOfEmployees[currentEmployee].getEmpTotalSales() + vectorOfItems[i].getItemPrice());
+												vectorOfItems.erase(vectorOfItems.begin() + i);//deletes item in vector
+												cout << "Successful Transaction" << endl;
+												success = true;
+											}
+										}
+
+										if (!success)
+										{
+											cout << "Failed to sell item!" << endl;
+										}
+									}
+									loggedInInput = 0;
 								}
-							}
 
 								else if (loggedInInput == 3) {
 									//loops through vectorOfItems and prints each itemName and itemPrice
@@ -396,12 +481,14 @@ int main() {
 					string username;
 					string password;
 					cout << "Please enter the following information to register for a new account." << endl;
+					string temp = "";
+					getline(cin, temp);
 					cout << "Name: ";
-					cin >> name;
+					getline(cin, name);
 					cout << "Username: ";
-					cin >> username;
+					getline(cin, username);
 					cout << "Password: ";
-					cin >> password;
+					getline(cin, password);
 
 					//validate for uniqueness of account
 					//will return true of false value which will be used in this conditional
