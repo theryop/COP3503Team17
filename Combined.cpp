@@ -672,7 +672,6 @@ int main() {
 			string age;
 			cout << "Hello customer! Please enter your name" << endl;
 			getline(cin, cn);
-			getline(cin, cn);
 
 			cout << "Please enter your age" << endl;
 			getline(cin, age);
@@ -719,32 +718,57 @@ int main() {
 						cout << "Sorry, that item is not in stock" << endl;
 					}
 					else {
-						cout << input << "'s are " << vectorOfItems[index].getItemPrice() << " each. Purchase? (y/n)" << endl;
-						string option; 	//stores yes or no answer
-										//				cin >> option;
+						cout << input << "'s are " << vectorOfItems[index].getItemPrice() << " each. Purchase?" << endl;
+						cout << "1. Yes" << endl;
+						cout << "2. No" << endl;
+						string option;
+						int choice; 	
+						
 						getline(cin, option);
-						//				bool cont = true;
-						while (option != "n") {
-							if (option == "y") {
+						while (choice != 2) 
+						{
+							while (!isNumber(option)) {
+						cout << endl << "Not a valid choice. Please enter 1 or 2." << endl;
+						getline(cin, option);
+						}
+						choice = atoi(option.c_str());
+
+							if (choice == 1) 
+							{
 								cout << "Congratulations, you purchased a(n) " << vectorOfItems[index].getItemName() << "!" << endl;
 								vectorOfItems.erase(vectorOfItems.begin() + index);
 								break;
 							}
 							else {
-								cout << "Invalid choice. Purchase? (y/n)" << endl;
+								cout << "Invalid choice. Purchase?" << endl;
+								cout << "1. Yes" << endl;
+								cout << "2. No" << endl;
 								getline(cin, option);
 							}
 						}
 					}
 				}
 				else if (secondinput == 2) {
+					string userchoice;
 					int userpref;
 					int creativity = 0;
 					int activity = 0;
 					int complexity = 0;
+					string tempchoice = "";
 					cout << "please answer the following questions with either a 1 or 2 so we can match you to your perfect item" << endl;
 					cout << "Would you rather 1. paint a picture or 2. ride a bike?" << endl;
-					cin >> userpref;
+					getline (cin,tempchoice);
+					
+					getline (cin,userchoice);
+					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
+					{
+						cout << "Not a valid choice. Please enter 1 or 2." << endl;
+						getline(cin, userchoice);
+						if (isNumber(userchoice))
+						{
+							userpref = atoi(userchoice.c_str());
+						}
+					}	
 					if (userpref == 1) {
 						creativity += 3;
 						activity -= 1;
@@ -753,7 +777,17 @@ int main() {
 						activity += 3;
 					}
 					cout << "Can you solve a Rubiks Cube? 1. yes 2. no" << endl;
-					cin >> userpref;
+					userpref = 0;
+					getline (cin,userchoice);
+					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
+					{
+						cout << "Not a valid choice. Please enter 1 or 2." << endl;
+						getline(cin, userchoice);
+						if (isNumber(userchoice))
+						{
+							userpref = atoi(userchoice.c_str());
+						}
+					}	
 					if (userpref == 1) {
 						complexity += 2;
 					}
@@ -761,17 +795,47 @@ int main() {
 						complexity -= 1;
 					}
 					cout << "Have you ever watched a Marvel movie? 1. yes 2. no " << endl;
-					cin >> userpref;
+					userpref = 0;
+					getline (cin,userchoice);
+					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
+					{
+						cout << "Not a valid choice. Please enter 1 or 2." << endl;
+						getline(cin, userchoice);
+						if (isNumber(userchoice))
+						{
+							userpref = atoi(userchoice.c_str());
+						}
+					}
 					if (userpref == 1) {
 						creativity += 1;
 					}
 					cout << "Can you see yourself skydiving? 1. yes 2. no" << endl;
-					cin >> userpref;
+					userpref = 0;
+					getline (cin,userchoice);
+					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
+					{
+						cout << "Not a valid choice. Please enter 1 or 2." << endl;
+						getline(cin, userchoice);
+						if (isNumber(userchoice))
+						{
+							userpref = atoi(userchoice.c_str());
+						}
+					}
 					if (userpref == 1) {
 						activity += 3;
 					}
 					cout << "Is your spirit animal moreso 1. a cheetah or 2. a sloth" << endl;
-					cin >> userpref;
+					userpref = 0;
+					getline (cin,userchoice);
+					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
+					{
+						cout << "Not a valid choice. Please enter 1 or 2." << endl;
+						getline(cin, userchoice);
+						if (isNumber(userchoice))
+						{
+							userpref = atoi(userchoice.c_str());
+						}
+					}
 					if (userpref == 1) {
 						activity += 2;
 					}
@@ -779,18 +843,48 @@ int main() {
 						activity -= 2;
 					}
 					cout << "Do you believe in aliens? 1. yes 2. no" << endl;
-					cin >> userpref;
+					userpref = 0;
+					getline (cin,userchoice);
+					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
+					{
+						cout << "Not a valid choice. Please enter 1 or 2." << endl;
+						getline(cin, userchoice);
+						if (isNumber(userchoice))
+						{
+							userpref = atoi(userchoice.c_str());
+						}
+					}
 					if (userpref == 1) {
 						creativity += 2;
 						complexity += 1;
 					}
 					cout << "Can you do a backflip? 1. yes 2. no" << endl;
-					cin >> userpref;
+					userpref = 0;
+					getline (cin,userchoice);
+					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
+					{
+						cout << "Not a valid choice. Please enter 1 or 2." << endl;
+						getline(cin, userchoice);
+						if (isNumber(userchoice))
+						{
+							userpref = atoi(userchoice.c_str());
+						}
+					}
 					if (userpref == 1) {
 						activity += 4;
 					}
 					cout << "1. Super Smash or 2. volleyball?" << endl;
-					cin >> userpref;
+					userpref = 0;
+					getline (cin,userchoice);
+					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
+					{
+						cout << "Not a valid choice. Please enter 1 or 2." << endl;
+						getline(cin, userchoice);
+						if (isNumber(userchoice))
+						{
+							userpref = atoi(userchoice.c_str());
+						}
+					}
 					if (userpref == 1) {
 						creativity += 2;
 						activity -= 1;
@@ -799,7 +893,17 @@ int main() {
 						activity += 2;
 					}
 					cout << "Would you rather 1. become a sentient strawberry with the mind you have now (cannot communicate or have mobility) or 2. just become a regular strawberry with strawberry thoughts?" << endl;
-					cin >> userpref;
+					userpref = 0;
+					getline (cin,userchoice);
+					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
+					{
+						cout << "Not a valid choice. Please enter 1 or 2." << endl;
+						getline(cin, userchoice);
+						if (isNumber(userchoice))
+						{
+							userpref = atoi(userchoice.c_str());
+						}
+					}
 					if (userpref == 1) {
 						creativity += 1;
 						activity += 1;
