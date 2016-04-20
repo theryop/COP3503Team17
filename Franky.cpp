@@ -316,32 +316,54 @@ int main() {
 									loggedInInput = 0; //need this so the loop continues until it exits
 								}
 
-								else if (loggedInInput == 2) {
-									//takes in input of item name
-									//removes first found item from vectorOfItems
-									//add to sale count of employee -> increments value of count for employee
-									// again this would be better in main function because we can keep track of employee with a variable equal to the username
-									string purchaseName;
-									cout << "What would you like to sell?" << endl;
-									cin >> purchaseName;
-									bool success = false;
-									// make all lowercase
+								else if (loggedInInput == 2) 
+							{
+								//takes in input of item name
+								//removes first found item from vectorOfItems
+								//add to sale count of employee -> increments value of count for employee
+								// again this would be better in main function because we can keep track of employee with a variable equal to the username
+								string purchaseName;
+								bool success = false;
+								// make all lowercase
+								cout << "What was the name of the item you sold?" << endl;
+								cin >> purchaseName;
+								int counter = 0;
+								char c;
+								while (counter < purchaseName.length()) //converts all characters in string to lowercase
+								{
+									c = purchaseName[counter];
+									if (isupper(c))
+									{
+										purchaseName[counter] = tolower(c);
 
-									for (size_t i = 0; i < vectorOfItems.size(); i++) {
-										if (purchaseName == vectorOfItems[i].getItemName()) {
-											vectorOfEmployees[currentEmployee].setEmpTotalSales((vectorOfEmployees[currentEmployee].getEmpTotalSales()) + 1); //need to  modify this to change it to be price + totalSales eventually
-											//deletes item in vector
-											vectorOfItems.erase(vectorOfItems.begin() + i);
-											cout << "Successful Transaction" << endl;
-											bool success = true;
-										}
 									}
+									counter++;
+								}
 
-									if (!success) {
+								for (size_t i = 0; i < vectorOfItems.size(); i++) 
+								{
+									if (purchaseName == vectorOfItems[i].getItemName()) 
+									{
+										cout << "We have found a " << purchaseName << " with a price of $" << vectorOfItems[i].getItemPrice() << " Proceed with transaction?" << endl;
+										cout << "1. Yes" << endl;
+										cout << "2. No" << endl;
+										int pchoice = 0;
+										cin >> pchoice;
+										if (pchoice == 1)
+										{
+											vectorOfEmployees[currentEmployee].setEmpTotalSales(vectorOfEmployees[currentEmployee].getEmpTotalSales() + 1);
+											vectorOfItems.erase(vectorOfItems.begin() + i);//deletes item in vector
+											cout << "Successful Transaction" << endl;
+											success = true;
+										}
+								   	}
+
+									if (!success) 
+									{
 										cout << "Failed to sell item!" << endl;
 									}
-									loggedInInput = 0;
 								}
+							}
 
 								else if (loggedInInput == 3) {
 									//loops through vectorOfItems and prints each itemName and itemPrice
