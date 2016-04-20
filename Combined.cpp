@@ -224,6 +224,65 @@ bool isDouble(string str) {
 	return true;
 }
 
+void purchaseItem(vector<items> & vectorOfItems) {
+	int count = 0;
+	int index;
+	string input;
+	string temp;
+	cout << "Enter the name of the item: " << endl;
+	getline(cin, input);
+	getline(cin, input);
+	for (unsigned int i = 0; i<input.length(); i++) {
+		input[i] = tolower(input[i]);
+	}
+	bool isInStock = false;
+	for (size_t i = 0; i < vectorOfItems.size(); i++) {
+		if (vectorOfItems[i].getItemName() == input) {
+			isInStock = true;
+			index = i;
+			count++;
+		}
+	}
+	if (!isInStock) {
+		cout << "Sorry, that item is not in stock" << endl;
+	}
+	else {
+		cout << "We have " << count << " " << input << "'s in stock for " << vectorOfItems[index].getItemPrice() << " each. Continue with purchase? (y/n)" << endl;
+		string option; 	//stores yes or no answer
+						//				cin >> option;
+		getline(cin, option);
+		//				bool cont = true;
+		while (option != "n") {
+			if (option == "y") {
+				int amt = -1;
+				while (amt == -1) {
+					cout << "How many would you like to purchase?" << endl;
+					cin >> amt;
+					if (amt < 0 || amt > count) {
+						cout << "invalid output" << endl;
+						amt = -1;
+					}
+				}
+				cout << "Congratulations, you purchased  " << amt << " " << input <<  "(s)!" << endl;
+				option = "n";
+				for (size_t i = 0; i < vectorOfItems.size(); i++) {
+					if (input == vectorOfItems[i].getItemName()) {
+						vectorOfItems.erase(vectorOfItems.begin() + i);
+						i--;
+						amt--;
+						if (amt == 0)
+							i=vectorOfItems.size();
+					}
+				}
+			}
+			else {
+				cout << "Invalid choice. Purchase? (y/n)" << endl;
+				getline(cin, option);
+			}
+		}
+	}
+}
+
 int main() {
 	vector<items> vectorOfItems; //creates the vector of items
 	vector<employees> vectorOfEmployees; //creates the vector of employees
@@ -699,55 +758,7 @@ int main() {
 					secondinput = atoi(input1.c_str());
 				}
 				if (secondinput == 1) {
-					int index;
-					string input;
-					string temp;
-					cout << "Enter the name of the item: " << endl;
-					getline(cin, input);
-					getline(cin, input);
-					for (unsigned int i = 0; i<input.length(); i++) {
-						input[i] = tolower(input[i]);
-					}
-					bool isInStock = false;
-					for (size_t i = 0; i < vectorOfItems.size(); i++) {
-						if (vectorOfItems[i].getItemName() == input) {
-							isInStock = true;
-							index = i;
-						}
-					}
-					if (!isInStock) {
-						cout << "Sorry, that item is not in stock" << endl;
-					}
-					else {
-						cout << input << "'s are " << vectorOfItems[index].getItemPrice() << " each. Purchase?" << endl;
-						cout << "1. Yes" << endl;
-						cout << "2. No" << endl;
-						string option;
-						int choice; 	
-						
-						getline(cin, option);
-						while (choice != 2) 
-						{
-							while (!isNumber(option)) {
-						cout << endl << "Not a valid choice. Please enter 1 or 2." << endl;
-						getline(cin, option);
-						}
-						choice = atoi(option.c_str());
-
-							if (choice == 1) 
-							{
-								cout << "Congratulations, you purchased a(n) " << vectorOfItems[index].getItemName() << "!" << endl;
-								vectorOfItems.erase(vectorOfItems.begin() + index);
-								break;
-							}
-							else {
-								cout << "Invalid choice. Purchase?" << endl;
-								cout << "1. Yes" << endl;
-								cout << "2. No" << endl;
-								getline(cin, option);
-							}
-						}
-					}
+					purchaseItem(vectorOfItems);
 				}
 				else if (secondinput == 2) {
 					string userchoice;
