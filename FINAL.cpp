@@ -2,9 +2,9 @@
 **Team 17
 **Peter Theryo, Devansh Parekh, Jed Rojas, Michelle Tzou, Scott Liu, Franky Liang
 **
-**Short Description: The following program maintains a database of items for a shop with two main interfaces, 
-**one for the employees and one of the customers. A few functionalities that employees can perform are restocking items, 
-**making sales, and checking profit. A few funcitons that customers can perform are purchasing an item and filling out a 
+**Short Description: The following program maintains a database of items for a shop with two main interfaces,
+**one for the employees and one of the customers. A few functionalities that employees can perform are restocking items,
+**making sales, and checking profit. A few funcitons that customers can perform are purchasing an item and filling out a
 **questionnaire which will the output which items currently in the inventory best suit the individiual.
 */
 
@@ -169,17 +169,17 @@ public:
 		}
 	}
 
-	void subtractBudget(double amount)
+	void subtractBudget(double amount) // takes away money from the budget
 	{
 		customerbudget = customerbudget - amount;
 	}
 
-	void addBudget(double amount)
+	void addBudget(double amount) // adds money to the budget
 	{
 		customerbudget = customerbudget + amount;
 	}
 
-	bool noMoreMoney(double amount)
+	bool noMoreMoney(double amount) //checks if there is money left in the budget
 	{
 		if (customerbudget - amount<0)
 		{
@@ -187,7 +187,7 @@ public:
 		}
 		return false;
 	}
-	bool cartContains(string item)
+	bool cartContains(string item) 
 	{
 		//checks if customer is trying to add an item to their cart that they already have
 		for (size_t i = 0; i < shoppingBasket.size(); i++)
@@ -201,8 +201,6 @@ public:
 	}
 
 };
-
-void bestFitItem(vector<items> & recommendedItems, vector<items> vectorOfItems, int c, int a, int comp);
 
 //finds the best fit item for user based on their characteristics
 //this algorithm takes into account the holistic values of the creativity, activity, and complexity
@@ -249,7 +247,7 @@ void bestFitItem(vector<items> & recommendedItems, vector<items> vectorOfItems, 
 	}
 };
 
-bool authorizationCheck(string pw)
+bool authorizationCheck(string pw) // checks input for company password
 {
 	if (pw == "COP3503rocks")
 	{
@@ -258,7 +256,7 @@ bool authorizationCheck(string pw)
 	return false;
 }
 
-bool isNumber(string str)
+bool isNumber(string str) // checks string if all characters are digits
 {
 	if (str == "")
 	{
@@ -274,7 +272,7 @@ bool isNumber(string str)
 	return true;
 }
 
-bool isDouble(string str)
+bool isDouble(string str) //checks string if all characters are doubles
 {
 	int numPeriods = 0;
 	if (str == "")
@@ -299,7 +297,7 @@ bool isDouble(string str)
 	return true;
 }
 
-bool isValidString(string str)
+bool isValidString(string str) //cgecks if strings are empty
 {
 	if (str == "")
 	{
@@ -308,7 +306,7 @@ bool isValidString(string str)
 	return true;
 }
 
-void purchaseItem(vector<items> & vectorOfItems, Customer & user)
+void purchaseItem(vector<items> & vectorOfItems, Customer & user) //method used to purchase an item on the customer side
 {
 	int count = 0;
 	int index;
@@ -337,7 +335,7 @@ void purchaseItem(vector<items> & vectorOfItems, Customer & user)
 	}
 	else
 	{
-		cout << "We have " << count << " " << input << "(s) in stock for $" <<fixed << setprecision(2) << vectorOfItems[index].getItemPrice() << " each. Continue with purchase?" << endl;
+		cout << "We have " << count << " " << input << "(s) in stock for $" << fixed << setprecision(2) << vectorOfItems[index].getItemPrice() << " each. Continue with purchase?" << endl;
 		cout << "1. Yes" << endl;
 		cout << "2. No" << endl;
 		string optionS;
@@ -578,7 +576,8 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems, Cu
 	}
 	else if (userpref == 2)
 	{
-		activity += 2;
+		activity += 1;
+		complexity += 1;
 	}
 
 	if (complexity > 5)
@@ -621,26 +620,106 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems, Cu
 		}
 	}
 	cout << endl;
-}	
-
-void display(vector<items> & vectorOfItems) {
-	cout << "Inventory:" << endl;
-	for (size_t i = 0; i < vectorOfItems.size(); i++) {
-		cout << endl << "Item: " << vectorOfItems[i].getItemName() << endl;
-		cout << "Price: $" << vectorOfItems[i].getItemPrice() << endl; //formats output to display two decimal places
-	}
-	cout << endl;
 }
 
-int main() {
-	vector<items> vectorOfItems; //creates the vector of items
-	vector<employees> vectorOfEmployees; //creates the vector of employees
+void displayEmployee(vector<items> & vectorOfItems) {
+	vector<items> itemsWithoutDupes;
+	vector<int> itemcounts;
+	size_t dupescounter = 0; //counter for interating through the vector of items
+	size_t dcc = 0;
+	size_t dccc = -1;
+	bool duplicate = false;
+	cout << "Current in stock: " << endl;
+	while (dupescounter < vectorOfItems.size())
+	{
+		duplicate = false;
+		dcc = 0;
+		while ((dcc < itemsWithoutDupes.size()) && (dcc < itemsWithoutDupes.size()))
+		{
+			if (vectorOfItems[dupescounter].getItemName() == itemsWithoutDupes[dcc].getItemName())
+			{
+				duplicate = true;
+			}
+			dcc++;
+		}
+		if (!duplicate) //if this is a new thing add a new item count, and itemwithoutdupes, then count to see how many items are duplicated
+		{
+			itemcounts.push_back(0);
+			itemsWithoutDupes.push_back(vectorOfItems[dupescounter]);
+			dccc++;
+			dcc = 0;
+			while (dcc < vectorOfItems.size())
+			{
+				if (vectorOfItems[dcc].getItemName() == itemsWithoutDupes[dccc].getItemName())
+				{
+					itemcounts[dccc]++;
+				}
+				dcc++;
+			}
 
-	vector<items> recommendedItems; //creates the vector of recommended items
+		}
+		else
+		{
 
-	int currentEmployee;
+		}
+		dupescounter++;
+	}
 
-	// the following code is an example of what can be held in the database
+	for (size_t i = 0; i < itemsWithoutDupes.size(); i++)
+	{
+		cout << "Item: " << itemsWithoutDupes[i].getItemName() << endl << "Price: $" << fixed << setprecision(2) << itemsWithoutDupes[i].getItemPrice() << endl << "Profit Per Sale: $" << itemsWithoutDupes[i].getItemProfit() << endl << "Quantity: " << itemcounts[i] << endl << "----------------------" << endl;
+	}
+}
+void display(vector<items> & vectorOfItems) {
+	vector<items> itemsWithoutDupes;
+	vector<int> itemcounts;
+	size_t dupescounter = 0; //counter for interating through the vector of items
+	size_t dcc = 0;
+	size_t dccc = -1;
+	bool duplicate = false;
+	cout << "Current in stock: " << endl;
+	while (dupescounter < vectorOfItems.size())
+	{
+		duplicate = false;
+		dcc = 0;
+		while ((dcc < itemsWithoutDupes.size()) && (dcc < itemsWithoutDupes.size()))
+		{
+			if (vectorOfItems[dupescounter].getItemName() == itemsWithoutDupes[dcc].getItemName())
+			{
+				duplicate = true;
+			}
+			dcc++;
+		}
+		if (!duplicate) //if this is a new thing add a new item count, and itemwithoutdupes, then count to see how many items are duplicated
+		{
+			itemcounts.push_back(0);
+			itemsWithoutDupes.push_back(vectorOfItems[dupescounter]);
+			dccc++;
+			dcc = 0;
+			while (dcc < vectorOfItems.size())
+			{
+				if (vectorOfItems[dcc].getItemName() == itemsWithoutDupes[dccc].getItemName())
+				{
+					itemcounts[dccc]++;
+				}
+				dcc++;
+			}
+
+		}
+		else
+		{
+
+		}
+		dupescounter++;
+	}
+
+	for (size_t i = 0; i < itemsWithoutDupes.size(); i++)
+	{
+		cout << "Item: " << itemsWithoutDupes[i].getItemName() << endl << "Price: $" << fixed << setprecision(2) << itemsWithoutDupes[i].getItemPrice() << endl << "Quantity: " << itemcounts[i] << endl << "----------------------" << endl;
+	}
+}
+void populateItems(vector <items> & vectorOfItems) // example vector used to populate the database with 3 of 8 different items
+{
 	int example = 0;
 	while (example < 3)
 	{
@@ -689,6 +768,17 @@ int main() {
 		vectorOfItems.push_back(items("pinwheel", 1.25, 0.50, 2, 1, 1));
 		example++;
 	}
+}
+int main() {
+	vector<items> vectorOfItems; //creates the vector of items
+	vector<employees> vectorOfEmployees; //creates the vector of employees
+
+	vector<items> recommendedItems; //creates the vector of recommended items
+
+	int currentEmployee;
+
+	// the following code is an example of what can be held in the database
+	populateItems(vectorOfItems);
 
 	//initial prompt for user to select employee or customer
 	cout << "Welcome to the shop! Are you an employee or customer?" << endl;
@@ -709,7 +799,7 @@ int main() {
 				isNum = false;
 			}
 		}
-		
+
 		//if the input is a number, convert the string to an int which will dictate where the code continues
 		if (isNum) {
 			firstInput = atoi(userInput.c_str());
@@ -718,7 +808,7 @@ int main() {
 			cout << "AUTHORIZATION REQUIRED. PLEASE ENTER COMPANY PASSWORD." << endl;
 			string pw = "";
 			getline(cin, pw);
-			if (!authorizationCheck(pw)) {
+			if (!authorizationCheck(pw)) { //validation of password
 				cout << "UNAUTHORIZED ACCESS TO SYSTEM DATABASE. RETURNING TO ENTRY POINT." << endl << endl;
 				cout << "Welcome to the shop! Are you an employee or customer?" << endl;
 				cout << "1. Employee" << endl;
@@ -728,7 +818,8 @@ int main() {
 			}
 			cout << endl;
 		}
-		if (firstInput == 1) {
+		if (firstInput == 1) 
+		{
 			if (hello) { //only prints the "Hello Employee!" statement once so as to not sound redundant
 				cout << "Hello Employee! Please login or register for an account." << endl;
 				hello = false;
@@ -738,7 +829,7 @@ int main() {
 			cout << "3. Exit" << endl;
 			int secondInput = 0;
 			string secondUserInput = "";
-			while (secondInput != 1 && secondInput != 2 && secondInput != 3)
+			while (secondInput != 1 && secondInput != 2 && secondInput != 3) //loop to validate the user's input
 			{
 				bool isNum2 = true;
 				cout << endl;
@@ -773,7 +864,7 @@ int main() {
 						}
 					}
 					if (isAuthenticated) {
-						
+
 						bool loginFirstTime = true;
 						string userLoggedInInput = "";
 						int loggedInInput = 0;
@@ -812,11 +903,11 @@ int main() {
 							}
 							if (loggedInInput == 1)
 							{ //RESTOCK METHOD
-								//takes in input for creativity/activity/complexity
-								//creates item
-								//pushes on to vectorOfItems
+							  //takes in input for creativity/activity/complexity
+							  //creates item
+							  //pushes on to vectorOfItems
 
-								//VALUES ARE TEMPORARY
+							  //VALUES ARE TEMPORARY
 								int creativity = 0;
 								int activity = 0;
 								int complexity = 0;
@@ -1051,55 +1142,9 @@ int main() {
 								loggedInInput = 0;
 							}
 
-							else if (loggedInInput == 3)
+							else if (loggedInInput == 3) // prints out the current inventory stock, with prices, profit per item, and quantities
 							{
-								//loops through vectorOfItems and prints each itemName and itemPrice, consolidating duplicates
-								vector<items> itemsWithoutDupes;
-								vector<int> itemcounts;
-								size_t dupescounter = 0; //counter for interating through the vector of items
-								size_t dcc = 0;
-								size_t dccc = -1;
-								bool duplicate = false;
-								cout << "Current in stock: " << endl;
-								while (dupescounter < vectorOfItems.size())
-								{
-									duplicate = false;
-									dcc = 0;
-									while ((dcc < itemsWithoutDupes.size()) && (dcc < itemsWithoutDupes.size()))
-									{
-										if (vectorOfItems[dupescounter].getItemName() == itemsWithoutDupes[dcc].getItemName())
-										{
-											duplicate = true;
-										}
-										dcc++;
-									}
-									if (!duplicate) //if this is a new thing add a new item count, and itemwithoutdupes, then count to see how many items are duplicated
-									{
-										itemcounts.push_back(0);
-										itemsWithoutDupes.push_back(vectorOfItems[dupescounter]);
-										dccc++;
-										dcc = 0;
-										while (dcc < vectorOfItems.size())
-										{
-											if (vectorOfItems[dcc].getItemName() == itemsWithoutDupes[dccc].getItemName())
-											{
-												itemcounts[dccc]++;
-											}
-											dcc++;
-										}
-
-									}
-									else
-									{
-
-									}
-									dupescounter++;
-								}
-
-								for (size_t i = 0; i < itemsWithoutDupes.size(); i++)
-								{
-									cout << "Item: " << itemsWithoutDupes[i].getItemName() << endl << "Price: $" << fixed << setprecision(2) << itemsWithoutDupes[i].getItemPrice() << endl << "Profit Per Sale: $" << itemsWithoutDupes[i].getItemProfit() << endl << "Quantity: " << itemcounts[i] << endl << "----------------------" << endl;
-								}
+								displayEmployee(vectorOfItems); 
 								loggedInInput = 0;
 							}
 
@@ -1120,7 +1165,7 @@ int main() {
 								loggedInInput = 0;
 							}
 						} //end of Employee options loop
-					//} // end of while loop for user logged in
+						  //} // end of while loop for user logged in
 					}
 					else
 					{ //if (!isAuthenticated)
@@ -1199,7 +1244,7 @@ int main() {
 			getline(cin, cn);
 			cout << endl << "Please enter your age" << endl;
 			getline(cin, ageStr);
-			while (!isNumber(ageStr)) {
+			while (!isNumber(ageStr)) { //validation for proper input
 				cout << endl << "Not a valid age. Please enter a positive integer." << endl;
 				getline(cin, ageStr);
 			}
@@ -1208,7 +1253,7 @@ int main() {
 			cout << endl << "How much money are you looking to spend today?" << endl;
 			string budgetStr = "";
 			getline(cin, budgetStr);
-			while (!isDouble(budgetStr)) {
+			while (!isDouble(budgetStr)) { //validation for proper dollar amount
 				cout << "Please enter a valid dollar amount." << endl;
 				getline(cin, budgetStr);
 			}
@@ -1249,7 +1294,7 @@ int main() {
 					recGift(vectorOfItems, recommendedItems, *user);
 					secondinput = 0;
 				}
-				else if (secondinput == 3)
+				else if (secondinput == 3)// displays shop inventory for customers
 				{
 					display(vectorOfItems);
 					secondinput = 0;
@@ -1264,7 +1309,7 @@ int main() {
 				{
 					cout << "How much money would you like to add?" << endl;
 					cout << "$";
-					double addbudget = 0; 
+					double addbudget = 0;
 					string addbudgetStr = "";
 					getline(cin, addbudgetStr);
 					getline(cin, addbudgetStr);
@@ -1343,7 +1388,7 @@ int main() {
 		{
 			cout << "Error, not a valid choice. Please enter either 1 for employee, 2 for customer or 3 to exit the shop." << endl;
 		}
-			firstInput = 0;
+		firstInput = 0;
 	} //closing bracket for the outermost while loop which checks for user validation
 	return 0;
 }
