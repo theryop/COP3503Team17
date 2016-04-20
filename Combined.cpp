@@ -182,58 +182,6 @@ void bestFitItem(vector<items> & recommendedItems, vector<items> vectorOfItems, 
 	}
 };
 
-
-/*
-void userLoggedIn() {
-while( true ) {
-cout << "What would you like to do?" << endl;
-cout << "1. Restock" << endl;
-cout << "2. Make a sale" << endl;
-cout << "3. Check inventory" << endl;
-cout << "4. Exit" << endl;
-int loggedInInput;
-cin >> loggedInInput;
-if ( loggedInInput == 1 ) {
-//takes in input for creativity/activity/complexity
-//creates item
-//pushes on to vectorOfItems
-int creativity;
-int activity;
-int complexity;
-string name;
-// make name all lowercase
-int price;
-vectorOfItems.push_back(item(name, price, creativity, activity, complexity));
-}
-else if ( loggedInInput == 2 ) {
-//takes in input of item name
-//removes first found item from vectorOfItems
-//add to sale count of employee -> increments value of count for employee
-// again this would be better in main function because we can keep track of employee with a variable equal to the username
-string purchaseName;
-// make all lowercase
-for (int i = 0; i < vectorOfItems.size(); i++) {
-if (purchaseName == vectorOfItems[i].getItemName) {
-vectorOfEmployees[currentEmployee].totalSales++;
-//deletes item in vector
-vectorOfItems.erase(vectorOfItems.begin() + i);
-}
-}
-}
-else if ( loggedInInput == 3 ) {
-//loops through vectorOfItems and prints each itemName and itemPrice
-cout << "Current in stock: " << endl;
-for (int i = 0; i < vectorOfItems.size(); i++) {
-cout << "Item: " <<vectorOfItems[i].getItemName << " Price: " << vectorOfItems[i].getItemPrice << endl;
-}
-}
-else if ( loggedInInput == 4 ) {
-break;
-}
-} // end of while loop for user logged in
-}
-*/
-
 bool authorizationCheck(string pw) {
 	if (pw == "COP3503rocks") {
 		return true;
@@ -269,6 +217,13 @@ bool isDouble(string str) {
 		}
 	}
 	if (numPeriods > 1) {
+		return false;
+	}
+	return true;
+}
+
+bool isValidString(string str) {
+	if (str == "") {
 		return false;
 	}
 	return true;
@@ -759,6 +714,10 @@ int main() {
 								string priceStr = "";
 								cout << "What is the name of item you'd like to restock?" << endl;
 								getline(cin, n);
+								while (!isValidString(n)) {
+									cout << "Error. The name of the item cannot be empty. Plase re-enter the name of the item." << endl;
+									getline(cin, n);
+								}
 								size_t counter = 0;
 								char c;
 								while (counter < n.length()) //converts all characters in string to lowercase
