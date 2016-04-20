@@ -232,7 +232,7 @@ void purchaseItem(vector<items> & vectorOfItems) {
 	string input;
 	string temp;
 	cout << "Enter the name of the item: " << endl;
-	getline(cin, input);
+	getline(cin, temp);
 	getline(cin, input);
 	for (unsigned int i = 0; i<input.length(); i++) {
 		input[i] = tolower(input[i]);
@@ -249,26 +249,42 @@ void purchaseItem(vector<items> & vectorOfItems) {
 		cout << "Sorry, that item is not in stock" << endl;
 	}
 	else {
-		cout << "We have " << count << " " << input << "'s in stock for " << vectorOfItems[index].getItemPrice() << " each. Continue with purchase? (y/n)" << endl;
-		string option; 	//stores yes or no answer
-						//				cin >> option;
-		getline(cin, option);
-		//				bool cont = true;
-		while (option != "n") {
-			if (option == "y") {
+			cout << "We have " << count << " " << input << "(s) in stock for " << vectorOfItems[index].getItemPrice() << " each. Continue with purchase?" << endl;
+			cout << "1. Yes" << endl;
+			cout << "2. No" << endl;
+			string optionS;
+			int option = 0; 
+			getline(cin, optionS);
+			option = atoi(optionS.c_str());
+			while (!isNumber(optionS) || option != 1 && option != 2)
+			{
+				cout << "Not a valid choice. Please enter 1 or 2." << endl;
+				getline(cin, optionS);
+				if (isNumber(optionS))
+				{
+					option = atoi(optionS.c_str());
+				}	
+			}			
+			if (option == 1) 
+			{
 				int amt = -1;
-				while (amt == -1) {
-					cout << "How many would you like to purchase?" << endl;
-					cin >> amt;
-					if (amt < 0 || amt > count) {
-						cout << "invalid output" << endl;
-						amt = -1;
-					}
-				}
+				cout << "How many would you like to purchase?" << endl;
+				getline(cin, optionS);
+				amt = atoi(optionS.c_str());
+				while ((!isNumber(optionS)) || (amt < 1) || (amt > count))
+				{
+					cout << "Not a valid choice. Please enter a number between 1 and " << count <<"." << endl;
+					getline(cin, optionS);
+					if (isNumber(optionS))
+					{
+						amt = atoi(optionS.c_str());
+					}	
+				}	
 				cout << "Congratulations, you purchased  " << amt << " " << input << "(s)!" << endl;
-				option = "n";
-				for (size_t i = 0; i < vectorOfItems.size(); i++) {
-					if (input == vectorOfItems[i].getItemName()) {
+				for (size_t i = 0; i < vectorOfItems.size(); i++) 
+				{
+					if (input == vectorOfItems[i].getItemName()) 
+					{
 						vectorOfItems.erase(vectorOfItems.begin() + i);
 						i--;
 						amt--;
@@ -277,11 +293,15 @@ void purchaseItem(vector<items> & vectorOfItems) {
 					}
 				}
 			}
-			else {
-				cout << "Invalid choice. Purchase? (y/n)" << endl;
-				getline(cin, option);
+			else if (option == 2)
+			{}
+			else 
+			{
+				cout << "Invalid choice. Purchase?" << endl;
+				cout << "1. Yes" << endl;
+				cout << "2. No" << endl;
 			}
-		}
+		
 	}
 }
 
@@ -745,7 +765,7 @@ int main() {
 
 			Customer *customer = new Customer(cn, age); //creates a new instance of a customer
 
-			cout << "Hello " << customer->getCustomerName() << "! Would would you like to do today?" << endl;
+			cout << endl << "Hello " << customer->getCustomerName() << "! What would you like to do today?" << endl;
 			cout << "1. Purchase item" << endl;		//search by name, instock? remove from list, display price
 			cout << "2. Find gift" << endl;			//go to questionnaire
 			cout << "3. Display all" << endl;		//loop through vector and print inventory
