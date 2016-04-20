@@ -12,12 +12,14 @@ class items { //constructor for the item class
 private:
 	string itemName;
 	double itemPrice;
+	double itemCost;
 	int itemCreativity;
 	int itemActivity;
 	int itemComplexity;
 public:
-	items(string n, double p, int c, int a, int comp) :itemName(n)
+	items(string n, double p, double cost, int c, int a, int comp) :itemName(n)
 		, itemPrice(p)
+		, itemCost(cost)
 		, itemCreativity(c)
 		, itemActivity(a)
 		, itemComplexity(comp)
@@ -29,6 +31,12 @@ public:
 
 	double getItemPrice() {
 		return itemPrice;
+	}
+	double getItemCost() {
+		return itemCost;
+	}
+	double getItemProfit(){
+		return itemPrice - itemCost;
 	}
 
 	int getItemCreativity() {
@@ -321,49 +329,49 @@ int main() {
 	int example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("ball", 2.50, 2, 5, 1));
+		vectorOfItems.push_back(items("ball", 2.50,1.10, 2, 5, 1));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("rubix's cube", 3.75, 2, 1, 5));
+		vectorOfItems.push_back(items("rubix's cube", 3.75,1.25, 2, 1, 5));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("coloring book", 2.25, 4, 1, 2));
+		vectorOfItems.push_back(items("coloring book", 2.25,.50, 4, 1, 2));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("keyboard", 25.50, 4, 1, 4));
+		vectorOfItems.push_back(items("keyboard", 25.50, 4,15.25, 1, 4));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("dance lessons", 15.50, 5, 5, 4));
+		vectorOfItems.push_back(items("dance lessons", 15.50,6.25, 5, 5, 4));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("chalk", 5.25, 5, 4, 1));
+		vectorOfItems.push_back(items("chalk", 5.25,1.25, 5, 4, 1));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("exercise machine", 175.25, 1, 4, 4));
+		vectorOfItems.push_back(items("exercise machine", 175.25,57.50, 1, 4, 4));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("pinwheel", 1.25, 2, 1, 1));
+		vectorOfItems.push_back(items("pinwheel", 1.25,.50, 2, 1, 1));
 		example++;
 	}
 
@@ -473,6 +481,8 @@ int main() {
 								int creativity = 0;
 								int activity = 0;
 								int complexity = 0;
+								double cost = 0;
+								string costStr = "";
 								string creativityStr = "";
 								string activityStr = "";
 								string complexityStr = "";
@@ -533,6 +543,7 @@ int main() {
 										if (restockchoice == 1)
 										{
 											price = vectorOfItems[counter].getItemPrice();
+											cost = vectorOfItems[counter].getItemCost();
 											creativity = vectorOfItems[counter].getItemCreativity();
 											activity = vectorOfItems[counter].getItemActivity();
 											complexity = vectorOfItems[counter].getItemComplexity();
@@ -567,6 +578,21 @@ int main() {
 											price = floor((100.*price) + .5) / 100.;
 										}
 									}
+									cout << "What is the cost of making this item?" << endl; // dis dat shit
+									cout << "$";
+									getline(cin, costStr);
+									cost = atof(costStr.c_str());
+									//rounds the price to two decimals
+									cost = floor((100.*cost) + .5) / 100.;
+									while (!isDouble(costStr) ||(cost > price) ) {
+										cout << "Not a valid choice. Please enter a valid cost." << endl;
+										getline(cin, costStr);
+										if (isDouble(costStr)) {
+											cost = atof(costStr.c_str());
+											//rounds the price to two decimals
+											cost = floor((100.*cost) + .5) / 100.;
+										}
+									}									
 									cout << "What is the creativity value associated with the item? (Scale of 1-5)" << endl;
 									getline(cin, creativityStr);
 									if (isNumber(creativityStr)) { //input validation for the creativity variable
@@ -605,7 +631,7 @@ int main() {
 									}
 								}
 
-								vectorOfItems.push_back(items(name, price, creativity, activity, complexity));
+								vectorOfItems.push_back(items(name, price,cost, creativity, activity, complexity));
 								cout << name << " successfully restocked!" << endl;
 								loggedInInput = 0; //need this so the loop continues until it exits
 							}
@@ -654,10 +680,9 @@ int main() {
 												pchoice = atoi(pchoiceStr.c_str());
 											}
 										}
-										if (pchoice == 1)
+										if (pchoice == 1) // adds profit to total sales
 										{
-											//NEED TO CHECK THE FOLLOWING CODE TO SEE IF IT WORKS ONCE WE IMPLEMENT A CHECK TOTAL SALES METHOD
-											vectorOfEmployees[currentEmployee].setEmpTotalSales(vectorOfEmployees[currentEmployee].getEmpTotalSales() + vectorOfItems[i].getItemPrice());
+											vectorOfEmployees[currentEmployee].setEmpTotalSales(vectorOfEmployees[currentEmployee].getEmpTotalSales() + vectorOfItems[i].getItemProfit());
 											vectorOfItems.erase(vectorOfItems.begin() + i);//deletes item in vector
 											cout << "Successful Transaction" << endl;
 											success = true;
