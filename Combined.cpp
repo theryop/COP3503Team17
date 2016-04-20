@@ -760,6 +760,7 @@ int main() {
 					getline (cin,tempchoice);
 					
 					getline (cin,userchoice);
+					userpref = atoi(userchoice.c_str());
 					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
 					{
 						cout << "Not a valid choice. Please enter 1 or 2." << endl;
@@ -779,6 +780,7 @@ int main() {
 					cout << "Can you solve a Rubiks Cube? 1. yes 2. no" << endl;
 					userpref = 0;
 					getline (cin,userchoice);
+					userpref = atoi(userchoice.c_str());
 					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
 					{
 						cout << "Not a valid choice. Please enter 1 or 2." << endl;
@@ -797,6 +799,7 @@ int main() {
 					cout << "Have you ever watched a Marvel movie? 1. yes 2. no " << endl;
 					userpref = 0;
 					getline (cin,userchoice);
+					userpref = atoi(userchoice.c_str());
 					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
 					{
 						cout << "Not a valid choice. Please enter 1 or 2." << endl;
@@ -812,6 +815,7 @@ int main() {
 					cout << "Can you see yourself skydiving? 1. yes 2. no" << endl;
 					userpref = 0;
 					getline (cin,userchoice);
+					userpref = atoi(userchoice.c_str());
 					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
 					{
 						cout << "Not a valid choice. Please enter 1 or 2." << endl;
@@ -827,6 +831,7 @@ int main() {
 					cout << "Is your spirit animal moreso 1. a cheetah or 2. a sloth" << endl;
 					userpref = 0;
 					getline (cin,userchoice);
+					userpref = atoi(userchoice.c_str());
 					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
 					{
 						cout << "Not a valid choice. Please enter 1 or 2." << endl;
@@ -845,6 +850,7 @@ int main() {
 					cout << "Do you believe in aliens? 1. yes 2. no" << endl;
 					userpref = 0;
 					getline (cin,userchoice);
+					userpref = atoi(userchoice.c_str());
 					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
 					{
 						cout << "Not a valid choice. Please enter 1 or 2." << endl;
@@ -861,6 +867,7 @@ int main() {
 					cout << "Can you do a backflip? 1. yes 2. no" << endl;
 					userpref = 0;
 					getline (cin,userchoice);
+					userpref = atoi(userchoice.c_str());
 					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
 					{
 						cout << "Not a valid choice. Please enter 1 or 2." << endl;
@@ -876,6 +883,7 @@ int main() {
 					cout << "1. Super Smash or 2. volleyball?" << endl;
 					userpref = 0;
 					getline (cin,userchoice);
+					userpref = atoi(userchoice.c_str());
 					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
 					{
 						cout << "Not a valid choice. Please enter 1 or 2." << endl;
@@ -895,6 +903,7 @@ int main() {
 					cout << "Would you rather 1. become a sentient strawberry with the mind you have now (cannot communicate or have mobility) or 2. just become a regular strawberry with strawberry thoughts?" << endl;
 					userpref = 0;
 					getline (cin,userchoice);
+					userpref = atoi(userchoice.c_str());
 					while (!isNumber(userchoice)|| userpref != 1 && userpref != 2) 
 					{
 						cout << "Not a valid choice. Please enter 1 or 2." << endl;
