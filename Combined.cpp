@@ -1035,6 +1035,7 @@ int main() {
 					cout << "Welcome to the shop! Are you an employee or customer?" << endl;
 					cout << "1. Employee" << endl;
 					cout << "2. Customer" << endl;
+					cout << "3. Exit" << endl;
 					hello = true;
 					break;
 				}
@@ -1100,6 +1101,7 @@ int main() {
 					cout << "Welcome to the shop! Are you an employee or customer?" << endl;
 					cout << "1. Employee" << endl;
 					cout << "2. Customer" << endl;
+					cout << "3. Exit" << endl;
 					hello = true;
 					break;
 				}
@@ -1135,6 +1137,10 @@ int main() {
 				cout << "2. Customer" << endl;
 				cout << "3. Exit Shop" << endl;
 			}
+			else if (exitOption == 1)
+			{
+				exit(EXIT_SUCCESS);
+			}
 		}
 		if (!(firstInput = 1 || firstInput == 2 || firstInput == 3)) {
 			cout << "Error, not a valid choice. Please enter either 1 for employee, 2 for customer or 3 to exit the shop." << endl;
@@ -1145,3 +1151,4 @@ int main() {
 	} //closing bracket for the outermost while loop which checks for user validation
 	return 0;
 }
+
