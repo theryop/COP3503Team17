@@ -1,3 +1,14 @@
+/*COP3503 Team Project
+**Team 17
+**Peter Theryo, Devansh Parekh, Jed Rojas, Michelle Tzou, Scott Liu, Franky Liang
+**
+**Short Description: The following program maintains a database of items for a shop with two main interfaces, 
+**one for the employees and one of the customers. A few functionalities that employees can perform are restocking items, 
+**making sales, and checking profit. A few funcitons that customers can perform are purchasing an item and filling out a 
+**questionnaire which will the output which items currently in the inventory best suit the individiual.
+*/
+
+//The password to the initial authorization is "COP3503rocks".
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -8,7 +19,7 @@
 
 using namespace std;
 
-class items { //constructor for the item class
+class items {
 private:
 	string itemName;
 	double itemPrice;
@@ -17,7 +28,7 @@ private:
 	int itemActivity;
 	int itemComplexity;
 public:
-	items(string n, double p, double cost, int c, int a, int comp) :itemName(n)
+	items(string n, double p, double cost, int c, int a, int comp) :itemName(n) //constructor for the item class
 		, itemPrice(p)
 		, itemCost(cost)
 		, itemCreativity(c)
@@ -32,10 +43,12 @@ public:
 	double getItemPrice() {
 		return itemPrice;
 	}
+
 	double getItemCost() {
 		return itemCost;
 	}
-	double getItemProfit(){
+
+	double getItemProfit() {
 		return itemPrice - itemCost;
 	}
 
@@ -94,7 +107,7 @@ private:
 	vector<string> shoppingBasket;
 
 public:
-	Customer(string cn, int ca) {
+	Customer(string cn, int ca) { //constructor for the customer class
 		customername = cn;
 		customerage = ca;
 	};
@@ -107,7 +120,7 @@ public:
 	void addPurchase(string item) {
 		//adds a gift to the customer's shopping basket 
 		if (cartContains(item)) {
-			cout << "you already have this item in your cart!" << endl;
+			cout << "You already have this item in your cart!" << endl;
 		}
 		else {
 			shoppingBasket.push_back(item);
@@ -115,7 +128,7 @@ public:
 	}
 	void printPurchase() {
 		//prints out all items in the customer's basket 
-		cout << "these are the items you have in your basket" << endl;
+		cout << "These are the items you have in your basket" << endl;
 		for (size_t i = 0; i < shoppingBasket.size(); i++) {
 			cout << shoppingBasket[i] << endl;
 		}
@@ -157,7 +170,7 @@ void bestFitItem(vector<items> & recommendedItems, vector<items> vectorOfItems, 
 				}
 				if (!already_checked) {
 					recommendedItems.push_back(vectorOfItems[i]);
-				}	
+				}
 			}
 		}
 		if (recommendedItems.empty()) {
@@ -221,6 +234,13 @@ break;
 }
 */
 
+bool authorizationCheck(string pw) {
+	if (pw == "COP3503rocks") {
+		return true;
+	}
+	return false;
+}
+
 bool isNumber(string str) {
 	for (size_t i = 0; i < str.length(); i++) {
 		if (!isdigit(str.at(i))) {
@@ -276,7 +296,7 @@ void purchaseItem(vector<items> & vectorOfItems) {
 		int option = 0;
 		getline(cin, optionS);
 		option = atoi(optionS.c_str());
-		while (!isNumber(optionS) || option != 1 && option != 2)
+		while (!isNumber(optionS) || (option != 1 && option != 2))
 		{
 			cout << "Not a valid choice. Please enter 1 or 2." << endl;
 			getline(cin, optionS);
@@ -325,21 +345,22 @@ void purchaseItem(vector<items> & vectorOfItems) {
 	}
 }
 
+//method that generates a questionnaire for the customer to fill out.
 void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
-	string userchoice;
-	int userpref;
+	string userchoice = "";
+	int userpref = 0;
 	int creativity = 0;
 	int activity = 0;
 	int complexity = 0;
 	string tempchoice = "";
 	recommendedItems.clear();
-	cout << "please answer the following questions with either a 1 or 2 so we can match you to your perfect item" << endl;
-	cout << "Would you rather 1. paint a picture or 2. ride a bike?" << endl;
+	cout << "Please answer the following questions with either a 1 or 2 so we can match you to your perfect item" << endl;
+	cout << endl << "Would you rather 1. paint a picture or 2. ride a bike?" << endl;
 	getline(cin, tempchoice);
 
 	getline(cin, userchoice);
 	userpref = atoi(userchoice.c_str());
-	while (!isNumber(userchoice) || userpref != 1 && userpref != 2)
+	while (!isNumber(userchoice) || (userpref != 1 && userpref != 2))
 	{
 		cout << "Not a valid choice. Please enter 1 or 2." << endl;
 		getline(cin, userchoice);
@@ -355,13 +376,13 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
 	else if (userpref == 2) {
 		activity += 3;
 	}
-	cout << "Can you solve a Rubiks Cube? 1. yes 2. no" << endl;
+	cout << endl << "Can you solve a Rubiks Cube? 1. yes 2. no" << endl;
 	userpref = 0;
 	getline(cin, userchoice);
 	userpref = atoi(userchoice.c_str());
-	while (!isNumber(userchoice) || userpref != 1 && userpref != 2)
+	while (!isNumber(userchoice) || (userpref != 1 && userpref != 2))
 	{
-		cout << "Not a valid choice. Please enter 1 or 2." << endl;
+		cout << endl << "Not a valid choice. Please enter 1 or 2." << endl;
 		getline(cin, userchoice);
 		if (isNumber(userchoice))
 		{
@@ -374,11 +395,11 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
 	else if (userpref == 2) {
 		complexity -= 1;
 	}
-	cout << "Have you ever watched a Marvel movie? 1. yes 2. no " << endl;
+	cout << endl << "Have you ever watched a Marvel movie? 1. yes 2. no " << endl;
 	userpref = 0;
 	getline(cin, userchoice);
 	userpref = atoi(userchoice.c_str());
-	while (!isNumber(userchoice) || userpref != 1 && userpref != 2)
+	while (!isNumber(userchoice) || (userpref != 1 && userpref != 2))
 	{
 		cout << "Not a valid choice. Please enter 1 or 2." << endl;
 		getline(cin, userchoice);
@@ -390,11 +411,11 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
 	if (userpref == 1) {
 		creativity += 1;
 	}
-	cout << "Can you see yourself skydiving? 1. yes 2. no" << endl;
+	cout << endl << "Can you see yourself skydiving? 1. yes 2. no" << endl;
 	userpref = 0;
 	getline(cin, userchoice);
 	userpref = atoi(userchoice.c_str());
-	while (!isNumber(userchoice) || userpref != 1 && userpref != 2)
+	while (!isNumber(userchoice) || (userpref != 1 && userpref != 2))
 	{
 		cout << "Not a valid choice. Please enter 1 or 2." << endl;
 		getline(cin, userchoice);
@@ -406,11 +427,11 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
 	if (userpref == 1) {
 		activity += 3;
 	}
-	cout << "Is your spirit animal moreso 1. a cheetah or 2. a sloth" << endl;
+	cout << endl << "Is your spirit animal moreso 1. a cheetah or 2. a sloth" << endl;
 	userpref = 0;
 	getline(cin, userchoice);
 	userpref = atoi(userchoice.c_str());
-	while (!isNumber(userchoice) || userpref != 1 && userpref != 2)
+	while (!isNumber(userchoice) || (userpref != 1 && userpref != 2))
 	{
 		cout << "Not a valid choice. Please enter 1 or 2." << endl;
 		getline(cin, userchoice);
@@ -425,11 +446,11 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
 	else if (userpref == 2) {
 		activity -= 2;
 	}
-	cout << "Do you believe in aliens? 1. yes 2. no" << endl;
+	cout << endl << "Do you believe in aliens? 1. yes 2. no" << endl;
 	userpref = 0;
 	getline(cin, userchoice);
 	userpref = atoi(userchoice.c_str());
-	while (!isNumber(userchoice) || userpref != 1 && userpref != 2)
+	while (!isNumber(userchoice) || (userpref != 1 && userpref != 2))
 	{
 		cout << "Not a valid choice. Please enter 1 or 2." << endl;
 		getline(cin, userchoice);
@@ -442,11 +463,11 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
 		creativity += 2;
 		complexity += 1;
 	}
-	cout << "Can you do a backflip? 1. yes 2. no" << endl;
+	cout << endl << "Can you do a backflip? 1. yes 2. no" << endl;
 	userpref = 0;
 	getline(cin, userchoice);
 	userpref = atoi(userchoice.c_str());
-	while (!isNumber(userchoice) || userpref != 1 && userpref != 2)
+	while (!isNumber(userchoice) || (userpref != 1 && userpref != 2))
 	{
 		cout << "Not a valid choice. Please enter 1 or 2." << endl;
 		getline(cin, userchoice);
@@ -458,11 +479,11 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
 	if (userpref == 1) {
 		activity += 4;
 	}
-	cout << "1. Super Smash or 2. volleyball?" << endl;
+	cout << endl << "1. Super Smash or 2. volleyball?" << endl;
 	userpref = 0;
 	getline(cin, userchoice);
 	userpref = atoi(userchoice.c_str());
-	while (!isNumber(userchoice) || userpref != 1 && userpref != 2)
+	while (!isNumber(userchoice) || (userpref != 1 && userpref != 2))
 	{
 		cout << "Not a valid choice. Please enter 1 or 2." << endl;
 		getline(cin, userchoice);
@@ -478,11 +499,11 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
 	else if (userpref == 2) {
 		activity += 2;
 	}
-	cout << "Would you rather 1. become a sentient strawberry with the mind you have now (cannot communicate or have mobility) or 2. just become a regular strawberry with strawberry thoughts?" << endl;
+	cout << endl << "Would you rather 1. become a sentient strawberry with the mind you have now (cannot communicate or have mobility) or 2. just become a regular strawberry with strawberry thoughts?" << endl;
 	userpref = 0;
 	getline(cin, userchoice);
 	userpref = atoi(userchoice.c_str());
-	while (!isNumber(userchoice) || userpref != 1 && userpref != 2)
+	while (!isNumber(userchoice) || (userpref != 1 && userpref != 2))
 	{
 		cout << "Not a valid choice. Please enter 1 or 2." << endl;
 		getline(cin, userchoice);
@@ -519,18 +540,22 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
 	}
 
 	bestFitItem(recommendedItems, vectorOfItems, creativity, activity, complexity);
-
-	cout << "activity: " << activity << " creativity: " << creativity << " complexity: " << complexity << endl;
-	cout << "items recommended: " << endl;
+	cout << "The following are your survey results:" << endl;
+	cout << "activity: " << activity << endl;
+	cout << "creativity: " << creativity << endl;
+	cout << "complexity: " << complexity << endl;
+	cout << "The following items are recommended for you:" << endl;
 	for (size_t i = 0; i < recommendedItems.size(); i++) {
-		cout << recommendedItems[i].getItemName() << endl;
-	}	
+		cout << "Item: " << recommendedItems[i].getItemName() << endl;
+		cout << "\tPrice: " << recommendedItems[i].getItemPrice() << endl;
+	}
+	cout << endl;
 }
 
 void display(vector<items> & vectorOfItems) {
 	cout << "Inventory:" << endl;
 	for (size_t i = 0; i < vectorOfItems.size(); i++) {
-		cout << "\nItem: " << vectorOfItems[i].getItemName() << endl;
+		cout << endl << "Item: " << vectorOfItems[i].getItemName() << endl;
 		cout << "Price: $" << vectorOfItems[i].getItemPrice() << endl; //formats output to display two decimal places
 	}
 	cout << endl;
@@ -548,49 +573,49 @@ int main() {
 	int example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("ball", 2.50,1.10, 2, 5, 1));
+		vectorOfItems.push_back(items("ball", 2.50, 1.10, 2, 5, 1));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("rubix's cube", 3.75,1.25, 2, 1, 5));
+		vectorOfItems.push_back(items("rubix's cube", 3.75, 1.25, 2, 1, 5));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("coloring book", 2.25,.50, 4, 1, 2));
+		vectorOfItems.push_back(items("coloring book", 2.25, .50, 4, 1, 2));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("keyboard", 25.50, 4,15.25, 1, 4));
+		vectorOfItems.push_back(items("keyboard", 25.50, 20, 4, 1, 4));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("dance lessons", 15.50,6.25, 5, 5, 4));
+		vectorOfItems.push_back(items("dance lessons", 15.50, 6.50, 5, 5, 4));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("chalk", 5.25,1.25, 5, 4, 1));
+		vectorOfItems.push_back(items("chalk", 5.25, 2.75, 5, 4, 1));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("exercise machine", 175.25,57.50, 1, 4, 4));
+		vectorOfItems.push_back(items("exercise machine", 175.25, 125.00, 1, 4, 4));
 		example++;
 	}
 	example = 0;
 	while (example < 3)
 	{
-		vectorOfItems.push_back(items("pinwheel", 1.25,.50, 2, 1, 1));
+		vectorOfItems.push_back(items("pinwheel", 1.25, 0.50, 2, 1, 1));
 		example++;
 	}
 
@@ -618,6 +643,20 @@ int main() {
 			firstInput = atoi(userInput.c_str());
 		}
 		if (firstInput == 1) { //entry points for the employee login
+			cout << "AUTHORIZATION REQUIRED. PLEASE ENTER COMPANY PASSWORD." << endl;
+			string pw = "";
+			getline(cin, pw);
+			if (!authorizationCheck(pw)) {
+				cout << "UNAUTHORIZED ACCESS TO SYSTEM DATABASE. RETURNING TO ENTRY POINT." << endl << endl;
+				cout << "Welcome to the shop! Are you an employee or customer?" << endl;
+				cout << "1. Employee" << endl;
+				cout << "2. Customer" << endl;
+				cout << "3. Exit Shop" << endl;
+				firstInput = -1;
+			}
+			cout << endl;
+		}
+		if (firstInput == 1) {
 			if (hello) { //only prints the "Hello Employee!" statement once so as to not sound redundant
 				cout << "Hello Employee! Please login or register for an account." << endl;
 				hello = false;
@@ -750,7 +789,7 @@ int main() {
 										if (isNumber(restockchoiceStr)) { //input validation for the restockchoice variable
 											restockchoice = atoi(restockchoiceStr.c_str());
 										}
-										while (!isNumber(restockchoiceStr) || restockchoice != 1 && restockchoice != 2) {
+										while (!isNumber(restockchoiceStr) || (restockchoice != 1 && restockchoice != 2)) {
 											cout << "Not a valid choice. Please enter 1 for Yes and 2 for No." << endl;
 											getline(cin, restockchoiceStr);
 											if (isNumber(restockchoiceStr)) {
@@ -803,7 +842,7 @@ int main() {
 									cost = atof(costStr.c_str());
 									//rounds the price to two decimals
 									cost = floor((100.*cost) + .5) / 100.;
-									while (!isDouble(costStr) ||(cost > price) ) {
+									while (!isDouble(costStr) || (cost > price)) {
 										cout << "Not a valid choice. Please enter a valid cost." << endl;
 										getline(cin, costStr);
 										if (isDouble(costStr)) {
@@ -811,7 +850,7 @@ int main() {
 											//rounds the price to two decimals
 											cost = floor((100.*cost) + .5) / 100.;
 										}
-									}									
+									}
 									cout << "What is the creativity value associated with the item? (Scale of 1-5)" << endl;
 									getline(cin, creativityStr);
 									if (isNumber(creativityStr)) { //input validation for the creativity variable
@@ -850,7 +889,7 @@ int main() {
 									}
 								}
 
-								vectorOfItems.push_back(items(name, price,cost, creativity, activity, complexity));
+								vectorOfItems.push_back(items(name, price, cost, creativity, activity, complexity));
 								cout << name << " successfully restocked!" << endl;
 								loggedInInput = 0; //need this so the loop continues until it exits
 							}
@@ -892,14 +931,14 @@ int main() {
 										if (isNumber(pchoiceStr)) { //input validation for the complexity variable
 											pchoice = atoi(pchoiceStr.c_str());
 										}
-										while (!isNumber(pchoiceStr) || pchoice != 1 && pchoice != 2) {
+										while (!isNumber(pchoiceStr) || (pchoice != 1 && pchoice != 2)) {
 											cout << "Not a valid choice. Please enter 1 for Yes or 2 for No." << endl;
 											getline(cin, pchoiceStr);
 											if (isNumber(pchoiceStr)) {
 												pchoice = atoi(pchoiceStr.c_str());
 											}
 										}
-										if (pchoice == 1) // adds profit to total sales
+										if (pchoice == 1) //adds total profit to sales
 										{
 											vectorOfEmployees[currentEmployee].setEmpTotalSales(vectorOfEmployees[currentEmployee].getEmpTotalSales() + vectorOfItems[i].getItemProfit());
 											vectorOfItems.erase(vectorOfItems.begin() + i);//deletes item in vector
@@ -1055,7 +1094,7 @@ int main() {
 					display(vectorOfItems);
 					secondinput = 0;
 				}
-				else if (secondinput == 4) { //EXIT FUNCTION DOESNT WORK AS OF RN
+				else if (secondinput == 4) { //exit function to return to employee/customer select screen
 					firstInput = -1;
 					cout << endl;
 					cout << "Welcome to the shop! Are you an employee or customer?" << endl;
@@ -1081,7 +1120,7 @@ int main() {
 			if (isNumber(exitOptionStr)) { //input validation for the restockchoice variable
 				exitOption = atoi(exitOptionStr.c_str());
 			}
-			while (!isNumber(exitOptionStr) || exitOption != 1 && exitOption != 2) {
+			while (!isNumber(exitOptionStr) || (exitOption != 1 && exitOption != 2)) {
 				cout << "Not a valid choice. Please enter 1 for Yes and 2 for No." << endl;
 				getline(cin, exitOptionStr);
 				if (isNumber(exitOptionStr)) {
