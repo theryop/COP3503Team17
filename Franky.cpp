@@ -141,10 +141,17 @@ bool isNumber(string str) {
 }
 
 bool isDouble(string str) {
+	int numPeriods = 0;
 	for (size_t i = 0; i < str.length(); i++) {
 		if (!(isdigit(str.at(i)) || str.at(i) == '.')) {
 			return false;
 		}
+		if (str.at(i) == '.') {
+			numPeriods++;
+		}
+	}
+	if (numPeriods > 1) {
+		return false;
 	}
 	return true;
 }
@@ -166,7 +173,7 @@ int main() {
 	while (firstInput != 1 && firstInput != 2) { //input validation for the first menu choice
 		bool isNum = true;
 		cout << endl;
-		cin >> userInput;
+		getline(cin, userInput);
 		//the following for loop checks to see if the user inputed a number
 		for (size_t i = 0; i < userInput.length(); i++) {
 			if (!isdigit(userInput.at(i))) {
@@ -190,7 +197,7 @@ int main() {
 			while (secondInput != 1 && secondInput != 2 && secondInput != 3) {
 				bool isNum2 = true;
 				cout << endl;
-				cin >> secondUserInput;
+				getline(cin,secondUserInput);
 				for (size_t i = 0; i < secondUserInput.length(); i++) {
 					if (!isdigit(secondUserInput.at(i))) {
 						isNum2 = false;
@@ -202,8 +209,7 @@ int main() {
 				if (secondInput == 1) {
 					string username;
 					string password;
-					string temp = "";
-					getline(cin, temp);
+					cout << "LOGIN SCREEN" << endl;
 					cout << "Username: ";
 					getline(cin, username);
 					cout << "Password: ";
@@ -305,13 +311,13 @@ int main() {
 											cout << name << " has been found in our inventory with a price of " << vectorOfItems[counter].getItemPrice() << ", " << vectorOfItems[counter].getItemCreativity() << " Creativity, " << vectorOfItems[counter].getItemActivity() << " Activity, and " << vectorOfItems[counter].getItemComplexity() << " complexity. Would you like to use these statistics?" << endl;
 											cout << "1. Yes" << endl;
 											cout << "2. No" << endl;
-											cin >> restockchoiceStr;
+											getline(cin, restockchoiceStr);
 											if (isNumber(restockchoiceStr)) { //input validation for the restockchoice variable
 												restockchoice = atoi(restockchoiceStr.c_str());
 											}
 											while (!isNumber(restockchoiceStr) || restockchoice != 1 && restockchoice != 2) {
 												cout << "Not a valid choice. Please enter 1 for Yes and 2 for No." << endl;
-												cin >> restockchoiceStr;
+												getline(cin, restockchoiceStr);
 												if (isNumber(restockchoiceStr)) {
 													restockchoice = atoi(restockchoiceStr.c_str());
 												}
@@ -340,49 +346,51 @@ int main() {
 									{
 										cout << "What is the selling price for this item?" << endl;
 										cout << "$";
-										cin >> priceStr;
+										getline(cin, priceStr);
 										if (isDouble(priceStr)) { //input validation for the price variable
 											price = atof(priceStr.c_str());
+											price = floor((100.*price) + .5) / 100.;
 										}
 										while (!isDouble(priceStr)) {
 											cout << "Not a valid choice. Please enter a valid price." << endl;
-											cin >> priceStr;
+											getline(cin, priceStr);
 											if (isDouble(priceStr)) {
 												price = atof(priceStr.c_str());
+												price = floor((100.*price) + .5) / 100.;
 											}
 										}
 										cout << "What is the creativity value associated with the item? (Scale of 1-5)" << endl;
-										cin >> creativityStr;
+										getline(cin, creativityStr);
 										if (isNumber(creativityStr)) { //input validation for the creativity variable
 											creativity = atoi(creativityStr.c_str());
 										}
 										while (!isNumber(creativityStr) || creativity < 1 || creativity > 5) {
 											cout << "Not a valid choice. Please enter an integer value between 1 and 5 inclusive." << endl;
-											cin >> creativityStr;
+											getline(cin, creativityStr);
 											if (isNumber(creativityStr)) {
 												creativity = atoi(creativityStr.c_str());
 											}
 										}
 										cout << "What is the activity value associated with the item? (Scale of 1-5)" << endl;
-										cin >> activityStr;
+										getline(cin, activityStr);
 										if (isNumber(activityStr)) { //input validation for the activity variable
 											activity = atoi(activityStr.c_str());
 										}
 										while (!isNumber(activityStr) || activity < 1 || activity > 5) {
 											cout << "Not a valid choice. Please enter an integer value between 1 and 5 inclusive." << endl;
-											cin >> activityStr;
+											getline(cin, activityStr);
 											if (isNumber(activityStr)) {
 												activity = atoi(activityStr.c_str());
 											}
 										}
 										cout << "What is the complexity value associated with the item? (Scale of 1-5)" << endl;
-										cin >> complexityStr;
+										getline(cin, complexityStr);
 										if (isNumber(complexityStr)) { //input validation for the complexity variable
 											complexity = atoi(complexityStr.c_str());
 										}
 										while (!isNumber(complexityStr) || complexity < 1 || complexity > 5) {
 											cout << "Not a valid choice. Please enter an integer value between 1 and 5 inclusive." << endl;
-											cin >> complexityStr;
+											getline(cin, activityStr);
 											if (isNumber(complexityStr)) {
 												complexity = atoi(complexityStr.c_str());
 											}
@@ -404,7 +412,7 @@ int main() {
 									bool success = false;
 									// make all lowercase
 									cout << "What was the name of the item you sold?" << endl;
-									cin >> purchaseName;
+									getline(cin, purchaseName);
 									size_t counter = 0;
 									char c;
 									while (counter < purchaseName.length()) //converts all characters in string to lowercase
@@ -427,13 +435,13 @@ int main() {
 											cout << "2. No" << endl;
 											int pchoice = 0;
 											string pchoiceStr = "";
-											cin >> pchoiceStr;
+											getline(cin, pchoiceStr);
 											if (isNumber(pchoiceStr)) { //input validation for the complexity variable
 												pchoice = atoi(pchoiceStr.c_str());
 											}
 											while (!isNumber(pchoiceStr) || pchoice != 1 && pchoice != 2) {
 												cout << "Not a valid choice. Please enter 1 for Yes or 2 for No." << endl;
-												cin >> pchoiceStr;
+												getline(cin, pchoiceStr);
 												if (isNumber(pchoiceStr)) {
 													pchoice = atoi(pchoiceStr.c_str());
 												}
@@ -447,11 +455,10 @@ int main() {
 												success = true;
 											}
 										}
-
-										if (!success)
-										{
-											cout << "Failed to sell item!" << endl;
-										}
+									}
+									if (!success)
+									{
+										cout << "Failed to sell item!" << endl;
 									}
 									loggedInInput = 0;
 								}
@@ -460,7 +467,7 @@ int main() {
 									//loops through vectorOfItems and prints each itemName and itemPrice
 									cout << "Current in stock: " << endl;
 									for (size_t i = 0; i < vectorOfItems.size(); i++) {
-										cout << "Item: " << vectorOfItems[i].getItemName() << " Price: " << vectorOfItems[i].getItemPrice() << endl;
+										cout << "Item: " << vectorOfItems[i].getItemName() << " Price: $" << vectorOfItems[i].getItemPrice() << endl;
 									}
 									loggedInInput = 0;
 								}
@@ -492,9 +499,8 @@ int main() {
 					string name;
 					string username;
 					string password;
+					cout << "NEW ACCOUNT REGISTRATION SCREEN" << endl;
 					cout << "Please enter the following information to register for a new account." << endl;
-					string temp = "";
-					getline(cin, temp);
 					cout << "Name: ";
 					getline(cin, name);
 					cout << "Username: ";
