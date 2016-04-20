@@ -144,6 +144,9 @@ public:
 	void subtractBudget(double amount) {
 		customerbudget = customerbudget - amount;
 	}
+	void addBudget(double amount){
+		customerbudget = customerbudget + amount;
+	}
 	bool noMoreMoney(double amount) {
 		if (customerbudget - amount<0) {
 			return true;
@@ -344,7 +347,7 @@ void purchaseItem(vector<items> & vectorOfItems, Customer & user) {
 }
 
 //method that generates a questionnaire for the customer to fill out.
-void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
+void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems, Customer & user) {
 	string userchoice = "";
 	int userpref = 0;
 	int creativity = 0;
@@ -546,6 +549,9 @@ void recGift(vector<items> & vectorOfItems, vector<items> & recommendedItems) {
 	for (size_t i = 0; i < recommendedItems.size(); i++) {
 		cout << "Item: " << recommendedItems[i].getItemName() << endl;
 		cout << "\tPrice: $" << recommendedItems[i].getItemPrice() << endl;
+		if (user.noMoreMoney(recommendedItems[i].getItemPrice())){
+			cout<<"\twarning! this item is over your budget!"<<endl;
+		}
 	}
 	cout << endl;
 }	
@@ -1074,7 +1080,9 @@ int main() {
 			cout << "1. Purchase item" << endl;		//search by name, instock? remove from list, display price
 			cout << "2. Find gift" << endl;			//go to questionnaire
 			cout << "3. Display all" << endl;		//loop through vector and print inventory
-			cout << "4. Go back" << endl;
+			cout << "4. view budget" << endl;
+			cout << "5. add money to budget" <<endl;
+			cout << "6. go back" <<endl;
 
 			bool keepgoing = true;
 			int secondinput = 0;
@@ -1095,7 +1103,7 @@ int main() {
 					secondinput = 0;
 				}
 				else if (secondinput == 2) { //entry point for the questionnaire
-					recGift(vectorOfItems, recommendedItems);
+					recGift(vectorOfItems, recommendedItems, *user);
 					secondinput = 0;
 				}
 				else if (secondinput == 3) {
@@ -1107,7 +1115,15 @@ int main() {
 					cout << endl;
 					secondinput = 0;
 				}
-				else if (secondinput == 5) { //exit function to return to employee/customer select screen
+				else if(secondinput==5){
+					cout<<"how much money would you like to add?"<<endl;
+					double addbudget;
+					cin>>addbudget;
+					user->addBudget(addbudget);
+					cout<<"added successfully!"<<endl;
+					secondinput=0;
+				}
+				else if (secondinput == 6) { //exit function to return to employee/customer select screen
 					firstInput = -1;
 					cout << endl;
 					cout << "Welcome to the shop! Are you an employee or customer?" << endl;
@@ -1123,7 +1139,9 @@ int main() {
 				cout << "1. Purchase item" << endl;
 				cout << "2. Find gift" << endl;
 				cout << "3. Display all" << endl;
-				cout << "4. Go back" << endl;
+				cout << "4. view budget" << endl;
+				cout << "5. add money to budget" <<endl;
+				cout << "6. go back" <<endl;
 			}
 		}//closing bracket for if customer
 		if (firstInput == 3) { //this is how to the user exists the shop
