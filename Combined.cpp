@@ -242,6 +242,10 @@ bool authorizationCheck(string pw) {
 }
 
 bool isNumber(string str) {
+	if (str == "")
+	{
+		return false;
+	}
 	for (size_t i = 0; i < str.length(); i++) {
 		if (!isdigit(str.at(i))) {
 			return false;
@@ -252,6 +256,10 @@ bool isNumber(string str) {
 
 bool isDouble(string str) {
 	int numPeriods = 0;
+	if (str == "")
+	{
+		return false;
+	}
 	for (size_t i = 0; i < str.length(); i++) {
 		if (!(isdigit(str.at(i)) || str.at(i) == '.')) {
 			return false;
@@ -1137,7 +1145,7 @@ int main() {
 				cout << "2. Customer" << endl;
 				cout << "3. Exit Shop" << endl;
 			}
-			else if (exitOption == 1)
+			if (exitOption == 1)
 			{
 				exit(EXIT_SUCCESS);
 			}
@@ -1145,10 +1153,7 @@ int main() {
 		if (!(firstInput = 1 || firstInput == 2 || firstInput == 3)) {
 			cout << "Error, not a valid choice. Please enter either 1 for employee, 2 for customer or 3 to exit the shop." << endl;
 		}
-		if (firstInput = -1) {
 			firstInput = 0;
-		}
 	} //closing bracket for the outermost while loop which checks for user validation
 	return 0;
 }
-
